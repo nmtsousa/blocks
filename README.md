@@ -1,16 +1,17 @@
-# blocks
+# Blocks
 
-A new Flutter project.
+In this project you will find the steps taken to develop a blocks puzzle, similar to Tetris. The project is being built in the open and I am documenting the major decisions in articles.
 
-## Getting Started
+## Current State Of The Project
 
-This project is a starting point for a Flutter application.
+The project is a Flutter application. To run it:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+flutter test && flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+It will run all tests and the application in a simulator of your choice.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## All Iterations
+
+1. [Major decisions](https://medium.com/@nuno.mt.sousa/block-puzzle-starting-the-project-26c7bee8cc48) and [Initial Project Skeleton](https://github.com/nmtsousa/blocks/tree/000_InitialProject).
