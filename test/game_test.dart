@@ -129,7 +129,7 @@ void main() {
   });
 
   test('When large piece does not fit the board, game is over.', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'P',
       'P',
     ], [
@@ -141,7 +141,7 @@ void main() {
   });
 
   test('Piece with holes can appear on board', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -158,7 +158,7 @@ void main() {
   });
 
   test('Piece with holes can appear on board', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -175,7 +175,7 @@ void main() {
   });
 
   test('Complex piece lands in the middle of the board', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -262,7 +262,7 @@ void main() {
   });
 
   test('You can move left with complex pieces', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -280,7 +280,7 @@ void main() {
   });
 
   test('You can not move left with complex pieces when they hit something', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       'P ',
     ], [
@@ -338,7 +338,7 @@ void main() {
   });
 
   test('You can move right with complex pieces', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -356,7 +356,7 @@ void main() {
   });
 
   test('You can move right with complex pieces ', () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       'P ',
     ], [
@@ -374,7 +374,7 @@ void main() {
 
   test('You can not move right with complex pieces when they hit something',
       () {
-    var game = buildGameWithPiece([
+    var game = buildGameWithSingleSpritePiece([
       'PP',
       ' P',
     ], [
@@ -391,20 +391,53 @@ void main() {
       '  PX',
     ]);
   });
-}
 
-Iterable<Piece> createPieceProvider(List<String> piece) sync* {
-  while (true) {
-    yield Piece(piece);
-  }
+  test('You can rotate pieces.', () {
+    var game = buildGameWithPiece(
+        Piece([
+          PieceSprite([
+            'PPP',
+            'P  ',
+          ]),
+          PieceSprite([
+            'PP',
+            ' P',
+            ' P',
+          ])
+        ]),
+        [
+          '    ',
+          '    ',
+          '    ',
+        ]);
+
+    game.tick();
+    game.rotatePiece();
+    verifyGameState(game, [
+      'PP  ',
+      ' P  ',
+      ' P  ',
+    ]);
+  });
 }
 
 Game buildGame(List<String> initialState) {
-  return Game.fromState(createPieceProvider(['P']), initialState);
+  return buildGameWithSingleSpritePiece(['P'], initialState);
 }
 
-buildGameWithPiece(List<String> piece, List<String> initialState) {
+buildGameWithSingleSpritePiece(List<String> piece, List<String> initialState) {
+  return Game.fromState(
+      createPieceProvider(Piece([PieceSprite(piece)])), initialState);
+}
+
+buildGameWithPiece(Piece piece, List<String> initialState) {
   return Game.fromState(createPieceProvider(piece), initialState);
+}
+
+Iterable<Piece> createPieceProvider(Piece piece) sync* {
+  while (true) {
+    yield piece;
+  }
 }
 
 void verifyGameState(Game game, List<String> expectedState) {

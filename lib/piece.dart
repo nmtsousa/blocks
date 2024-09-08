@@ -1,9 +1,9 @@
-class Piece {
+class PieceSprite {
   final List<String> piece;
   late int rowCount;
   late int colCount;
 
-  Piece(this.piece) {
+  PieceSprite(this.piece) {
     rowCount = piece.length;
     assert(rowCount > 0);
 
@@ -15,7 +15,31 @@ class Piece {
     }
   }
 
-  String getPixel(int row, int col) {
+  String _getPixel(int row, int col) {
     return piece[row].substring(col, col + 1);
+  }
+}
+
+class Piece {
+  final List<PieceSprite> sprites;
+  int _currentSprite = 0;
+
+  Piece(this.sprites);
+
+  String getPixel(int row, int col) {
+    return _getCurrentSprite()._getPixel(row, col);
+  }
+
+  PieceSprite _getCurrentSprite() => sprites[_currentSprite];
+
+  int getRowCount() => _getCurrentSprite().rowCount;
+
+  int getColCount() => _getCurrentSprite().colCount;
+
+  void rotate() {
+    _currentSprite++;
+    if (_currentSprite >= sprites.length) {
+      _currentSprite = 0;
+    }
   }
 }
