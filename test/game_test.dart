@@ -77,6 +77,25 @@ void main() {
           'P',
         ]));
   });
+
+  test('Pieces land when they reach the last row', () {
+    var game = buildGame([
+      ' ',
+      ' ',
+    ]);
+
+    game.tick();
+    game.tick();
+    game.tick();
+
+    expect(game.state, equals(State.running));
+    expect(
+        game.toString(),
+        equalsGame([
+          'P',
+          'P',
+        ]));
+  });
 }
 
 Iterable<Piece> pixelPieceProvider() sync* {

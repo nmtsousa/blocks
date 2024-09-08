@@ -54,11 +54,28 @@ class Game {
       state = State.gameOver;
     }
 
-    if (_currentPiece == null) {
-      _pieceRow = 0;
-      _currentPiece = _pieceProvider.take(1).first;
+    var piece = _currentPiece;
+    if (piece != null) {
+      if (_pieceRow + piece._piece.length >= rowCount) {
+        _landPiece(_pieceRow, piece);
+        _placeNewPiece();
+      } else {
+        _pieceRow++;
+      }
     } else {
-      _pieceRow++;
+      _placeNewPiece();
+    }
+  }
+
+  void _placeNewPiece() {
+    _pieceRow = 0;
+    _currentPiece = _pieceProvider.take(1).first;
+  }
+
+  void _landPiece(int pieceRow, Piece piece) {
+    for (int i = 0; i < piece._piece.length; i++) {
+      _boardState[pieceRow + i] = _boardState[pieceRow + i]
+          .replaceRange(0, piece._piece[i].length, piece._piece[i]);
     }
   }
 }
