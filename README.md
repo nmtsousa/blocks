@@ -17,4 +17,4 @@ It will run all tests and the application in a simulator of your choice.
 | Article                                                                                             | GitHub tag                                                                       |
 | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | [Major decisions](https://medium.com/@nuno.mt.sousa/block-puzzle-starting-the-project-26c7bee8cc48) | [000_InitialProject](https://github.com/nmtsousa/blocks/tree/000_InitialProject) |
-| [Base Game Logic](https://medium.com/@nuno.mt.sousa/block-puzzle-base-game-logic-8280139e9528)      | [001_BaseGameLogic](https://github.com/nmtsousa/blocks/tree/001_BaseGameLogic)  |
+| [Base Game Logic](https://medium.com/@nuno.mt.sousa/block-puzzle-base-game-logic-8280139e9528)      | [001_BaseGameLogic](https://medium.com/@nuno.mt.sousa/block-puzzle-base-game-logic-8280139e9528)  |
