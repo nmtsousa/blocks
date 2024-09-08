@@ -31,14 +31,21 @@ class Game {
 
     var stateStr = '[';
 
-    for (int i = 0; i < rowCount; i++) {
-      var rowState = _boardState[i];
-      if (piece != null && _pieceRow == i) {
-        rowState = rowState.replaceRange(
-            _pieceCol, _pieceCol + piece.colCount, piece.piece[0]);
+    for (int row = 0; row < rowCount; row++) {
+      var rowState = _boardState[row];
+      if (piece != null &&
+          row >= _pieceRow &&
+          row < _pieceRow + piece.rowCount) {
+        for (int col = 0; col < piece.colCount; col++) {
+          var pixel = piece.getPixel(row - _pieceRow, col);
+          if (pixel != ' ') {
+            rowState = rowState.replaceRange(
+                _pieceCol + col, _pieceCol + col + 1, pixel);
+          }
+        }
       }
       stateStr += rowState;
-      if ((i + 1) < rowCount) {
+      if ((row + 1) < rowCount) {
         stateStr += ']\n[';
       }
     }
@@ -55,7 +62,7 @@ class Game {
       if (_pieceRow + piece.rowCount >= rowCount) {
         shouldLand = true;
       } else {
-        if (!piceFitsInBoard(piece, _pieceRow + 1, _pieceCol)) {
+        if (!pieceFitsInBoard(piece, _pieceRow + 1, _pieceCol)) {
           shouldLand = true;
         }
       }
@@ -72,9 +79,9 @@ class Game {
     var nextPiece = _pieceProvider.take(1).first;
 
     _pieceRow = 0;
-    _pieceCol = ((colCount - nextPiece.colCount) / 2).round();
+    _pieceCol = ((colCount - nextPiece.colCount) / 2).truncate();
 
-    if (!piceFitsInBoard(nextPiece, _pieceRow, _pieceCol)) {
+    if (!pieceFitsInBoard(nextPiece, _pieceRow, _pieceCol)) {
       state = State.gameOver;
       _currentPiece = null;
     }
@@ -83,16 +90,26 @@ class Game {
   }
 
   void _landPiece(Piece piece) {
-    for (int i = 0; i < piece.piece.length; i++) {
-      _boardState[_pieceRow + i] = _boardState[_pieceRow + i]
-          .replaceRange(_pieceCol, _pieceCol + piece.colCount, piece.piece[i]);
+    for (int row = 0; row < piece.rowCount; row++) {
+      for (int col = 0; col < piece.colCount; col++) {
+        var pixel = piece.getPixel(row, col);
+        if (pixel != ' ') {
+          _boardState[_pieceRow + row] = _boardState[_pieceRow + row]
+              .replaceRange(_pieceCol + col, _pieceCol + col + 1, pixel);
+        }
+      }
     }
   }
 
-  bool piceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
+  bool pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
     for (int row = 0; row < piece.rowCount; row++) {
+      if (pieceRow + row >= rowCount) {
+        return false;
+      }
+
       for (int col = 0; col < piece.colCount; col++) {
-        if (_boardState[pieceRow + row][pieceCol + col] != " ") {
+        if (piece.getPixel(row, col) != ' ' &&
+            _boardState[pieceRow + row][pieceCol + col] != ' ') {
           return false;
         }
       }

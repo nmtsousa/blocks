@@ -14,4 +14,8 @@ class Piece {
       assert(row.length == colCount);
     }
   }
+
+  String getPixel(int row, int col) {
+    return piece[row].substring(col, col + 1);
+  }
 }

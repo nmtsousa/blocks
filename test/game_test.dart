@@ -139,16 +139,125 @@ void main() {
     game.tick();
     expect(game.state, equals(State.gameOver));
   });
+
+  test('When large piece does not fit the board, game is over.', () {
+    var game = buildGameWithPiece([
+      'P',
+      'P',
+    ], [
+      '   ',
+    ]);
+
+    game.tick();
+    expect(game.state, equals(State.gameOver));
+  });
+
+  test('Piece with holes can appear on board', () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '   ',
+      '   ',
+    ]);
+
+    game.tick();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'PP ',
+          ' P ',
+        ]));
+  });
+
+  test('Piece with holes can appear on board', () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '   ',
+      'X  ',
+    ]);
+
+    game.tick();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'PP ',
+          'XP ',
+        ]));
+  });
+
+  test('Complex piece lands in the middle of the board', () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '   ',
+      '   ',
+      '   ',
+      'X  ',
+    ]);
+
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          'PP ',
+          ' P ',
+          '   ',
+          'X  ',
+        ]));
+
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          '   ',
+          'PP ',
+          ' P ',
+          'X  ',
+        ]));
+
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          '   ',
+          '   ',
+          'PP ',
+          'XP ',
+        ]));
+
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          'PP ',
+          ' P ',
+          'PP ',
+          'XP ',
+        ]));
+
+    game.tick();
+    expect(game.state, State.gameOver);
+  });
 }
 
-Iterable<Piece> pixelPieceProvider() sync* {
+Iterable<Piece> createPieceProvider(List<String> piece) sync* {
   while (true) {
-    yield Piece(['P']);
+    yield Piece(piece);
   }
 }
 
 Game buildGame(List<String> initialState) {
-  return Game.fromState(pixelPieceProvider(), initialState);
+  return Game.fromState(createPieceProvider(['P']), initialState);
+}
+
+buildGameWithPiece(List<String> piece, List<String> initialState) {
+  return Game.fromState(createPieceProvider(piece), initialState);
 }
 
 Matcher equalsGame(List<String> rows) {
