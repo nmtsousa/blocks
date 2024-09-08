@@ -7,10 +7,10 @@ class Game {
   late Piece _currentPiece;
   int _pieceRow = 0;
   int _pieceCol = 0;
-  State state = State.running;
+  State _state = State.running;
   late List<String> _boardState;
-  late int colCount;
-  late int rowCount;
+  late final int colCount;
+  late final int rowCount;
 
   Game.fromState(this._pieceProvider, List<String> initialState) {
     assert(initialState.isNotEmpty);
@@ -25,6 +25,10 @@ class Game {
     rowCount = _boardState.length;
 
     _placeNewPiece();
+  }
+
+  State getState() {
+    return _state;
   }
 
   @override
@@ -79,7 +83,7 @@ class Game {
     _pieceCol = ((colCount - _currentPiece.getColCount()) / 2).truncate();
 
     if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
-      state = State.gameOver;
+      _state = State.gameOver;
     }
   }
 
