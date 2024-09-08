@@ -3,21 +3,21 @@ import 'package:test/test.dart';
 
 void main() {
   test('Game fails to initialize if there are no lines in the board', () {
-    expect(() => Game.fromState([]), throwsA(isA<AssertionError>()));
+    expect(() => buildGame([]), throwsA(isA<AssertionError>()));
   });
 
   test('Game fails to initialize if there are no columns', () {
-    expect(() => Game.fromState([""]), throwsA(isA<AssertionError>()));
+    expect(() => buildGame([""]), throwsA(isA<AssertionError>()));
   });
 
   test(
       'Game fails to initialize if the number of columns is not the same for all lines',
       () {
-    expect(() => Game.fromState(["X", "XX"]), throwsA(isA<AssertionError>()));
+    expect(() => buildGame(["X", "XX"]), throwsA(isA<AssertionError>()));
   });
 
   test('Game can be initialized from state', () {
-    var game = Game.fromState([
+    var game = buildGame([
       '   ',
       ' X ',
     ]);
@@ -31,12 +31,12 @@ void main() {
   });
 
   test('Games starts in the running state', () {
-    var game = Game.fromState([' ']);
+    var game = buildGame([' ']);
     expect(game.state, equals(State.running));
   });
 
   test('Game is over when there is no space for the next piece', () {
-    var game = Game.fromState([
+    var game = buildGame([
       'X',
     ]);
 
@@ -44,8 +44,33 @@ void main() {
 
     expect(game.state, equals(State.gameOver));
   });
+
+  test('Piece enters board when there is space', () {
+    var game = buildGame([
+      ' ',
+    ]);
+
+    game.tick();
+
+    expect(game.state, equals(State.running));
+    expect(
+        game.toString(),
+        equalsGame([
+          'P',
+        ]));
+  });
 }
 
-equalsGame(List<String> rows) {
+Iterable<Piece> pixelPieceProvider() sync* {
+  while (true) {
+    yield Piece(['P']);
+  }
+}
+
+Game buildGame(List<String> initialState) {
+  return Game.fromState(pixelPieceProvider(), initialState);
+}
+
+Matcher equalsGame(List<String> rows) {
   return equals('[${rows.join(']\n[')}]');
 }
