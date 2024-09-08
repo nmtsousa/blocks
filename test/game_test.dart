@@ -23,12 +23,10 @@ void main() {
       ' X ',
     ]);
 
-    expect(
-        game.toString(),
-        equalsGame([
-          '   ',
-          ' X ',
-        ]));
+    verifyGameState(game, [
+      '   ',
+      ' X ',
+    ]);
   });
 
   test('Games starts in the running state', () {
@@ -54,11 +52,9 @@ void main() {
     game.tick();
 
     expect(game.state, equals(State.running));
-    expect(
-        game.toString(),
-        equalsGame([
-          'P',
-        ]));
+    verifyGameState(game, [
+      'P',
+    ]);
   });
 
   test('Piece moves down when time ticks', () {
@@ -71,12 +67,10 @@ void main() {
     game.tick();
 
     expect(game.state, equals(State.running));
-    expect(
-        game.toString(),
-        equalsGame([
-          ' ',
-          'P',
-        ]));
+    verifyGameState(game, [
+      ' ',
+      'P',
+    ]);
   });
 
   test('Pieces land when they reach the last row', () {
@@ -90,12 +84,10 @@ void main() {
     game.tick();
 
     expect(game.state, equals(State.running));
-    expect(
-        game.toString(),
-        equalsGame([
-          'P',
-          'P',
-        ]));
+    verifyGameState(game, [
+      'P',
+      'P',
+    ]);
   });
 
   test('Pieces start in the middle of the board', () {
@@ -104,11 +96,9 @@ void main() {
     ]);
 
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          ' P ',
-        ]));
+    verifyGameState(game, [
+      ' P ',
+    ]);
   });
 
   test('Pieces land if they hit something on the way down', () {
@@ -119,12 +109,10 @@ void main() {
 
     game.tick();
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          ' P ',
-          ' X ',
-        ]));
+    verifyGameState(game, [
+      ' P ',
+      ' X ',
+    ]);
   });
 
   test(
@@ -163,12 +151,10 @@ void main() {
 
     game.tick();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'PP ',
-          ' P ',
-        ]));
+    verifyGameState(game, [
+      'PP ',
+      ' P ',
+    ]);
   });
 
   test('Piece with holes can appear on board', () {
@@ -182,12 +168,10 @@ void main() {
 
     game.tick();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'PP ',
-          'XP ',
-        ]));
+    verifyGameState(game, [
+      'PP ',
+      'XP ',
+    ]);
   });
 
   test('Complex piece lands in the middle of the board', () {
@@ -202,44 +186,36 @@ void main() {
     ]);
 
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          'PP ',
-          ' P ',
-          '   ',
-          'X  ',
-        ]));
+    verifyGameState(game, [
+      'PP ',
+      ' P ',
+      '   ',
+      'X  ',
+    ]);
 
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          '   ',
-          'PP ',
-          ' P ',
-          'X  ',
-        ]));
+    verifyGameState(game, [
+      '   ',
+      'PP ',
+      ' P ',
+      'X  ',
+    ]);
 
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          '   ',
-          '   ',
-          'PP ',
-          'XP ',
-        ]));
+    verifyGameState(game, [
+      '   ',
+      '   ',
+      'PP ',
+      'XP ',
+    ]);
 
     game.tick();
-    expect(
-        game.toString(),
-        equalsGame([
-          'PP ',
-          ' P ',
-          'PP ',
-          'XP ',
-        ]));
+    verifyGameState(game, [
+      'PP ',
+      ' P ',
+      'PP ',
+      'XP ',
+    ]);
 
     game.tick();
     expect(game.state, State.gameOver);
@@ -253,11 +229,9 @@ void main() {
     game.tick();
     game.moveLeft();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'P  ',
-        ]));
+    verifyGameState(game, [
+      'P  ',
+    ]);
   });
 
   test('You can not move to the left when you hit the board limit', () {
@@ -269,11 +243,9 @@ void main() {
     game.moveLeft();
     game.moveLeft();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'P  ',
-        ]));
+    verifyGameState(game, [
+      'P  ',
+    ]);
   });
 
   test('You can not move to the left if there is something in the way', () {
@@ -284,11 +256,9 @@ void main() {
     game.tick();
     game.moveLeft();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'XP ',
-        ]));
+    verifyGameState(game, [
+      'XP ',
+    ]);
   });
 
   test('You can move left with complex pieces', () {
@@ -303,12 +273,10 @@ void main() {
     game.tick();
     game.moveLeft();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          'PP  ',
-          'XP  ',
-        ]));
+    verifyGameState(game, [
+      'PP  ',
+      'XP  ',
+    ]);
   });
 
   test('You can not move left with complex pieces when they hit something', () {
@@ -323,12 +291,10 @@ void main() {
     game.tick();
     game.moveLeft();
 
-    expect(
-        game.toString(),
-        equalsGame([
-          ' PP ',
-          'XP  ',
-        ]));
+    verifyGameState(game, [
+      ' PP ',
+      'XP  ',
+    ]);
   });
 }
 
@@ -344,6 +310,10 @@ Game buildGame(List<String> initialState) {
 
 buildGameWithPiece(List<String> piece, List<String> initialState) {
   return Game.fromState(createPieceProvider(piece), initialState);
+}
+
+void verifyGameState(Game game, List<String> expectedState) {
+  expect(game.toString(), equalsGame(expectedState));
 }
 
 Matcher equalsGame(List<String> rows) {
