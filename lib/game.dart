@@ -2,8 +2,13 @@ enum State { running, gameOver }
 
 class Piece {
   List<String> _piece;
+  late int rowCount;
+  late int colCount;
 
-  Piece(this._piece);
+  Piece(this._piece) {
+    rowCount = _piece.length;
+    colCount = _piece[0].length;
+  }
 }
 
 class Game {
@@ -39,7 +44,7 @@ class Game {
       var rowState = _boardState[i];
       if (piece != null && _pieceRow == i) {
         rowState = rowState.replaceRange(
-            _pieceCol, _pieceCol + piece._piece[0].length, piece._piece[0]);
+            _pieceCol, _pieceCol + piece.colCount, piece._piece[0]);
       }
       stateStr += rowState;
       if ((i + 1) < rowCount) {
@@ -56,15 +61,29 @@ class Game {
     }
 
     var piece = _currentPiece;
-    if (piece != null) {
-      if (_pieceRow + piece._piece.length >= rowCount) {
-        _landPiece(_pieceRow, piece);
+    if (piece == null) {
+      _placeNewPiece();
+    } else {
+      var shouldLand = false;
+      if (_pieceRow + piece.rowCount >= rowCount) {
+        shouldLand = true;
+      } else {
+        outer:
+        for (int row = 0; row < piece.rowCount; row++) {
+          for (int col = 0; col < piece.colCount; col++) {
+            if (_boardState[_pieceRow + row + 1][_pieceCol + col] != " ") {
+              shouldLand = true;
+              break outer;
+            }
+          }
+        }
+      }
+      if (shouldLand) {
+        _landPiece(piece);
         _placeNewPiece();
       } else {
         _pieceRow++;
       }
-    } else {
-      _placeNewPiece();
     }
   }
 
@@ -72,14 +91,14 @@ class Game {
     var nextPiece = _pieceProvider.take(1).first;
 
     _pieceRow = 0;
-    _pieceCol = ((colCount - nextPiece._piece[0].length) / 2).round();
+    _pieceCol = ((colCount - nextPiece.colCount) / 2).round();
     _currentPiece = nextPiece;
   }
 
-  void _landPiece(int pieceRow, Piece piece) {
+  void _landPiece(Piece piece) {
     for (int i = 0; i < piece._piece.length; i++) {
-      _boardState[pieceRow + i] = _boardState[pieceRow + i]
-          .replaceRange(0, piece._piece[i].length, piece._piece[i]);
+      _boardState[_pieceRow + i] = _boardState[_pieceRow + i]
+          .replaceRange(_pieceCol, _pieceCol + piece.colCount, piece._piece[i]);
     }
   }
 }

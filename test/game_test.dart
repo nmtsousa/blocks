@@ -109,6 +109,22 @@ void main() {
           ' P ',
         ]));
   });
+
+  test('Pieces land if they hit something on the way down.', () {
+    var game = buildGame([
+      '   ',
+      ' X ',
+    ]);
+
+    game.tick();
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          ' P ',
+          ' X ',
+        ]));
+  });
 }
 
 Iterable<Piece> pixelPieceProvider() sync* {
