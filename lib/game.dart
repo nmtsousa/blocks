@@ -4,7 +4,7 @@ enum State { running, gameOver }
 
 class Game {
   final Iterable<Piece> _pieceProvider;
-  Piece? _currentPiece;
+  late Piece _currentPiece;
   int _pieceRow = 0;
   int _pieceCol = 0;
   State state = State.running;
@@ -24,7 +24,7 @@ class Game {
     _boardState = initialState;
     rowCount = _boardState.length;
 
-    tick();
+    _placeNewPiece();
   }
 
   @override
@@ -56,24 +56,19 @@ class Game {
   }
 
   void tick() {
-    var piece = _currentPiece;
-    if (piece == null) {
+    var shouldLand = false;
+    if (_pieceRow + _currentPiece.getRowCount() >= rowCount) {
+      shouldLand = true;
+    } else {
+      if (!pieceFitsInBoard(_currentPiece, _pieceRow + 1, _pieceCol)) {
+        shouldLand = true;
+      }
+    }
+    if (shouldLand) {
+      _landPiece(_currentPiece);
       _placeNewPiece();
     } else {
-      var shouldLand = false;
-      if (_pieceRow + piece.getRowCount() >= rowCount) {
-        shouldLand = true;
-      } else {
-        if (!pieceFitsInBoard(piece, _pieceRow + 1, _pieceCol)) {
-          shouldLand = true;
-        }
-      }
-      if (shouldLand) {
-        _landPiece(piece);
-        _placeNewPiece();
-      } else {
-        _pieceRow++;
-      }
+      _pieceRow++;
     }
   }
 
@@ -85,7 +80,6 @@ class Game {
 
     if (!pieceFitsInBoard(nextPiece, _pieceRow, _pieceCol)) {
       state = State.gameOver;
-      _currentPiece = null;
     }
 
     _currentPiece = nextPiece;
@@ -120,13 +114,12 @@ class Game {
   }
 
   void moveLeft() {
-    var piece = _currentPiece;
-    if (_pieceCol == 0 || piece == null) {
+    if (_pieceCol == 0) {
       return;
     } else {
-      for (int row = 0; row < piece.getRowCount(); row++) {
-        for (int col = 0; col < piece.getColCount(); col++) {
-          if (piece.getPixel(row, col) == ' ') {
+      for (int row = 0; row < _currentPiece.getRowCount(); row++) {
+        for (int col = 0; col < _currentPiece.getColCount(); col++) {
+          if (_currentPiece.getPixel(row, col) == ' ') {
             continue;
           }
 
@@ -140,13 +133,12 @@ class Game {
   }
 
   void moveRight() {
-    var piece = _currentPiece;
-    if (_pieceCol == colCount - 1 || piece == null) {
+    if (_pieceCol == colCount - 1) {
       return;
     } else {
-      for (int row = 0; row < piece.getRowCount(); row++) {
-        for (int col = 0; col < piece.getColCount(); col++) {
-          if (piece.getPixel(row, col) == ' ') {
+      for (int row = 0; row < _currentPiece.getRowCount(); row++) {
+        for (int col = 0; col < _currentPiece.getColCount(); col++) {
+          if (_currentPiece.getPixel(row, col) == ' ') {
             continue;
           }
 
@@ -161,9 +153,6 @@ class Game {
   }
 
   void rotatePiece() {
-    var piece = _currentPiece;
-    if (piece != null) {
-      piece.rotate();
-    }
+    _currentPiece.rotate();
   }
 }
