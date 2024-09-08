@@ -24,7 +24,7 @@ void main() {
     ]);
 
     verifyGameState(game, [
-      '   ',
+      ' P ',
       ' X ',
     ]);
   });
@@ -39,8 +39,6 @@ void main() {
       'X',
     ]);
 
-    game.tick();
-
     expect(game.state, equals(State.gameOver));
   });
 
@@ -48,8 +46,6 @@ void main() {
     var game = buildGame([
       ' ',
     ]);
-
-    game.tick();
 
     expect(game.state, equals(State.running));
     verifyGameState(game, [
@@ -63,7 +59,6 @@ void main() {
       ' ',
     ]);
 
-    game.tick();
     game.tick();
 
     expect(game.state, equals(State.running));
@@ -81,7 +76,6 @@ void main() {
 
     game.tick();
     game.tick();
-    game.tick();
 
     expect(game.state, equals(State.running));
     verifyGameState(game, [
@@ -95,7 +89,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     verifyGameState(game, [
       ' P ',
     ]);
@@ -107,7 +100,6 @@ void main() {
       ' X ',
     ]);
 
-    game.tick();
     game.tick();
     verifyGameState(game, [
       ' P ',
@@ -124,7 +116,6 @@ void main() {
     ]);
 
     game.tick();
-    game.tick();
     expect(game.state, equals(State.gameOver));
   });
 
@@ -136,7 +127,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     expect(game.state, equals(State.gameOver));
   });
 
@@ -148,8 +138,6 @@ void main() {
       '   ',
       '   ',
     ]);
-
-    game.tick();
 
     verifyGameState(game, [
       'PP ',
@@ -165,8 +153,6 @@ void main() {
       '   ',
       'X  ',
     ]);
-
-    game.tick();
 
     verifyGameState(game, [
       'PP ',
@@ -185,7 +171,6 @@ void main() {
       'X  ',
     ]);
 
-    game.tick();
     verifyGameState(game, [
       'PP ',
       ' P ',
@@ -226,7 +211,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     game.moveLeft();
 
     verifyGameState(game, [
@@ -239,7 +223,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     game.moveLeft();
     game.moveLeft();
 
@@ -253,7 +236,6 @@ void main() {
       'X  ',
     ]);
 
-    game.tick();
     game.moveLeft();
 
     verifyGameState(game, [
@@ -270,7 +252,6 @@ void main() {
       'X   ',
     ]);
 
-    game.tick();
     game.moveLeft();
 
     verifyGameState(game, [
@@ -288,7 +269,6 @@ void main() {
       'X   ',
     ]);
 
-    game.tick();
     game.moveLeft();
 
     verifyGameState(game, [
@@ -302,7 +282,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     game.moveRight();
 
     verifyGameState(game, [
@@ -315,7 +294,6 @@ void main() {
       '   ',
     ]);
 
-    game.tick();
     game.moveRight();
     game.moveRight();
 
@@ -329,7 +307,6 @@ void main() {
       '  X',
     ]);
 
-    game.tick();
     game.moveRight();
 
     verifyGameState(game, [
@@ -346,7 +323,6 @@ void main() {
       '   X',
     ]);
 
-    game.tick();
     game.moveRight();
 
     verifyGameState(game, [
@@ -364,8 +340,8 @@ void main() {
       '   X',
     ]);
 
-    game.tick();
     game.moveRight();
+
     verifyGameState(game, [
       '  PP',
       '  PX',
@@ -382,7 +358,6 @@ void main() {
       '   X',
     ]);
 
-    game.tick();
     game.moveRight();
     game.moveRight();
 
@@ -411,8 +386,8 @@ void main() {
           '    ',
         ]);
 
-    game.tick();
     game.rotatePiece();
+
     verifyGameState(game, [
       'PP  ',
       ' P  ',

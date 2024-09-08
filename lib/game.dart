@@ -23,6 +23,8 @@ class Game {
     }
     _boardState = initialState;
     rowCount = _boardState.length;
+
+    tick();
   }
 
   @override
