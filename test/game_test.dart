@@ -29,6 +29,21 @@ void main() {
           ' X ',
         ]));
   });
+
+  test('Games starts in the running state', () {
+    var game = Game.fromState([' ']);
+    expect(game.state, equals(State.running));
+  });
+
+  test('Game is over when there is no space for the next piece', () {
+    var game = Game.fromState([
+      'X',
+    ]);
+
+    game.tick();
+
+    expect(game.state, equals(State.gameOver));
+  });
 }
 
 equalsGame(List<String> rows) {
