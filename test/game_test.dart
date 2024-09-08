@@ -59,6 +59,24 @@ void main() {
           'P',
         ]));
   });
+
+  test('Piece moves down when time ticks', () {
+    var game = buildGame([
+      ' ',
+      ' ',
+    ]);
+
+    game.tick();
+    game.tick();
+
+    expect(game.state, equals(State.running));
+    expect(
+        game.toString(),
+        equalsGame([
+          ' ',
+          'P',
+        ]));
+  });
 }
 
 Iterable<Piece> pixelPieceProvider() sync* {

@@ -3,28 +3,50 @@ enum State { running, gameOver }
 class Piece {
   List<String> _piece;
 
-  Piece(List<String> this._piece);
+  Piece(this._piece);
 }
 
 class Game {
-  Iterable<Piece> _pieceProvider;
+  final Iterable<Piece> _pieceProvider;
+  Piece? _currentPiece;
+  int _pieceRow = 0;
   State state = State.running;
   late List<String> _boardState;
+  late int colCount;
+  late int rowCount;
+
   Game.fromState(this._pieceProvider, List<String> initialState) {
     assert(initialState.isNotEmpty);
 
-    var rowLength = initialState[0].length;
-    assert(rowLength > 0);
+    colCount = initialState[0].length;
+    assert(colCount > 0);
 
     for (int i = 1; i < initialState.length; i++) {
-      assert(initialState[i].length == rowLength);
+      assert(initialState[i].length == colCount);
     }
     _boardState = initialState;
+    rowCount = _boardState.length;
   }
 
   @override
   String toString() {
-    return '[${_boardState.join("]\n[")}]';
+    var piece = _currentPiece;
+
+    var stateStr = '[';
+
+    for (int i = 0; i < rowCount; i++) {
+      var rowState = _boardState[i];
+      if (piece != null && _pieceRow == i) {
+        rowState =
+            rowState.replaceRange(0, piece._piece[0].length, piece._piece[0]);
+      }
+      stateStr += rowState;
+      if ((i + 1) < rowCount) {
+        stateStr += ']\n[';
+      }
+    }
+    stateStr += ']';
+    return stateStr;
   }
 
   void tick() {
@@ -32,7 +54,11 @@ class Game {
       state = State.gameOver;
     }
 
-    Piece piece = _pieceProvider.take(1).first;
-    _boardState[0] = piece._piece[0];
+    if (_currentPiece == null) {
+      _pieceRow = 0;
+      _currentPiece = _pieceProvider.take(1).first;
+    } else {
+      _pieceRow++;
+    }
   }
 }
