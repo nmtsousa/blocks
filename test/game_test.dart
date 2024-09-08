@@ -296,6 +296,101 @@ void main() {
       'XP  ',
     ]);
   });
+
+  test('It is possible to move pieces to the right', () {
+    var game = buildGame([
+      '   ',
+    ]);
+
+    game.tick();
+    game.moveRight();
+
+    verifyGameState(game, [
+      '  P',
+    ]);
+  });
+
+  test('You can not move to the right when you hit the board limit', () {
+    var game = buildGame([
+      '   ',
+    ]);
+
+    game.tick();
+    game.moveRight();
+    game.moveRight();
+
+    verifyGameState(game, [
+      '  P',
+    ]);
+  });
+
+  test('You can not move to the right if there is something in the way', () {
+    var game = buildGame([
+      '  X',
+    ]);
+
+    game.tick();
+    game.moveRight();
+
+    verifyGameState(game, [
+      ' PX',
+    ]);
+  });
+
+  test('You can move right with complex pieces', () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '    ',
+      '   X',
+    ]);
+
+    game.tick();
+    game.moveRight();
+
+    verifyGameState(game, [
+      ' PP ',
+      '  PX',
+    ]);
+  });
+
+  test('You can move right with complex pieces ', () {
+    var game = buildGameWithPiece([
+      'PP',
+      'P ',
+    ], [
+      '    ',
+      '   X',
+    ]);
+
+    game.tick();
+    game.moveRight();
+    verifyGameState(game, [
+      '  PP',
+      '  PX',
+    ]);
+  });
+
+  test('You can not move right with complex pieces when they hit something',
+      () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '    ',
+      '   X',
+    ]);
+
+    game.tick();
+    game.moveRight();
+    game.moveRight();
+
+    verifyGameState(game, [
+      ' PP ',
+      '  PX',
+    ]);
+  });
 }
 
 Iterable<Piece> createPieceProvider(List<String> piece) sync* {

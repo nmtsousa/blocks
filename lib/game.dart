@@ -136,4 +136,25 @@ class Game {
       _pieceCol--;
     }
   }
+
+  void moveRight() {
+    var piece = _currentPiece;
+    if (_pieceCol == colCount - 1 || piece == null) {
+      return;
+    } else {
+      for (int row = 0; row < piece.rowCount; row++) {
+        for (int col = 0; col < piece.colCount; col++) {
+          if (piece.getPixel(row, col) == ' ') {
+            continue;
+          }
+
+          if (_boardState[_pieceRow + row][_pieceCol + col + 1] != ' ') {
+            return;
+          }
+        }
+      }
+
+      _pieceCol++;
+    }
+  }
 }
