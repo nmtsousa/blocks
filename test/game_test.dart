@@ -394,6 +394,89 @@ void main() {
       ' P  ',
     ]);
   });
+
+  test('You can not rotate a piece if it passes the bottom of the board', () {
+    var game = buildGameWithPiece(
+        Piece([
+          PieceSprite([
+            'PPP',
+            'P  ',
+          ]),
+          PieceSprite([
+            'PP',
+            ' P',
+            ' P',
+          ])
+        ]),
+        [
+          '    ',
+          '    ',
+        ]);
+
+    game.rotatePiece();
+
+    verifyGameState(game, [
+      'PPP ',
+      'P   ',
+    ]);
+  });
+
+  test('You can not rotate a piece if it will hit something', () {
+    var game = buildGameWithPiece(
+        Piece([
+          PieceSprite([
+            'PPP',
+            'P  ',
+          ]),
+          PieceSprite([
+            'PP',
+            ' P',
+            ' P',
+          ])
+        ]),
+        [
+          '    ',
+          '    ',
+          ' X  ',
+        ]);
+
+    game.rotatePiece();
+
+    verifyGameState(game, [
+      'PPP ',
+      'P   ',
+      ' X  ',
+    ]);
+  });
+
+  test('You can not rotate a piece if it exceed the board width', () {
+    var game = buildGameWithPiece(
+        Piece([
+          PieceSprite([
+            'PP',
+            ' P',
+            ' P',
+          ]),
+          PieceSprite([
+            'PPP',
+            'P  ',
+          ]),
+        ]),
+        [
+          '   ',
+          '   ',
+          '   ',
+        ]);
+
+    game.moveRight();
+    game.rotatePiece();
+
+    verifyGameState(game, [
+      ' PP',
+      '  P',
+      '  P',
+    ]);
+  });
 }
 
 Game buildGame(List<String> initialState) {

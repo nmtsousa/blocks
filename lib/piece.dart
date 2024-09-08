@@ -36,8 +36,8 @@ class Piece {
 
   int getColCount() => _getCurrentSprite().colCount;
 
-  void rotate() {
-    _currentSprite++;
+  void rotate(int amount) {
+    _currentSprite += amount;
     if (_currentSprite >= sprites.length) {
       _currentSprite = 0;
     }

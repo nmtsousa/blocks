@@ -60,7 +60,7 @@ class Game {
     if (_pieceRow + _currentPiece.getRowCount() >= rowCount) {
       shouldLand = true;
     } else {
-      if (!pieceFitsInBoard(_currentPiece, _pieceRow + 1, _pieceCol)) {
+      if (!_pieceFitsInBoard(_currentPiece, _pieceRow + 1, _pieceCol)) {
         shouldLand = true;
       }
     }
@@ -73,16 +73,14 @@ class Game {
   }
 
   void _placeNewPiece() {
-    var nextPiece = _pieceProvider.take(1).first;
+    _currentPiece = _pieceProvider.take(1).first;
 
     _pieceRow = 0;
-    _pieceCol = ((colCount - nextPiece.getColCount()) / 2).truncate();
+    _pieceCol = ((colCount - _currentPiece.getColCount()) / 2).truncate();
 
-    if (!pieceFitsInBoard(nextPiece, _pieceRow, _pieceCol)) {
+    if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
       state = State.gameOver;
     }
-
-    _currentPiece = nextPiece;
   }
 
   void _landPiece(Piece piece) {
@@ -97,13 +95,17 @@ class Game {
     }
   }
 
-  bool pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
+  bool _pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
     for (int row = 0; row < piece.getRowCount(); row++) {
       if (pieceRow + row >= rowCount) {
         return false;
       }
 
       for (int col = 0; col < piece.getColCount(); col++) {
+        if (pieceCol + col >= colCount) {
+          return false;
+        }
+
         if (piece.getPixel(row, col) != ' ' &&
             _boardState[pieceRow + row][pieceCol + col] != ' ') {
           return false;
@@ -153,6 +155,9 @@ class Game {
   }
 
   void rotatePiece() {
-    _currentPiece.rotate();
+    _currentPiece.rotate(1);
+    if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
+      _currentPiece.rotate(-1);
+    }
   }
 }
