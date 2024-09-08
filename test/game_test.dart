@@ -244,6 +244,92 @@ void main() {
     game.tick();
     expect(game.state, State.gameOver);
   });
+
+  test('It is possible to move pieces to the left', () {
+    var game = buildGame([
+      '   ',
+    ]);
+
+    game.tick();
+    game.moveLeft();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'P  ',
+        ]));
+  });
+
+  test('You can not move to the left when you hit the board limit', () {
+    var game = buildGame([
+      '   ',
+    ]);
+
+    game.tick();
+    game.moveLeft();
+    game.moveLeft();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'P  ',
+        ]));
+  });
+
+  test('You can not move to the left if there is something in the way', () {
+    var game = buildGame([
+      'X  ',
+    ]);
+
+    game.tick();
+    game.moveLeft();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'XP ',
+        ]));
+  });
+
+  test('You can move left with complex pieces', () {
+    var game = buildGameWithPiece([
+      'PP',
+      ' P',
+    ], [
+      '    ',
+      'X   ',
+    ]);
+
+    game.tick();
+    game.moveLeft();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          'PP  ',
+          'XP  ',
+        ]));
+  });
+
+  test('You can not move left with complex pieces when they hit something', () {
+    var game = buildGameWithPiece([
+      'PP',
+      'P ',
+    ], [
+      '    ',
+      'X   ',
+    ]);
+
+    game.tick();
+    game.moveLeft();
+
+    expect(
+        game.toString(),
+        equalsGame([
+          ' PP ',
+          'XP  ',
+        ]));
+  });
 }
 
 Iterable<Piece> createPieceProvider(List<String> piece) sync* {
