@@ -96,6 +96,19 @@ void main() {
           'P',
         ]));
   });
+
+  test('Pieces start in the middle of the board.', () {
+    var game = buildGame([
+      '   ',
+    ]);
+
+    game.tick();
+    expect(
+        game.toString(),
+        equalsGame([
+          ' P ',
+        ]));
+  });
 }
 
 Iterable<Piece> pixelPieceProvider() sync* {

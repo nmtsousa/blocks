@@ -10,6 +10,7 @@ class Game {
   final Iterable<Piece> _pieceProvider;
   Piece? _currentPiece;
   int _pieceRow = 0;
+  int _pieceCol = 0;
   State state = State.running;
   late List<String> _boardState;
   late int colCount;
@@ -37,8 +38,8 @@ class Game {
     for (int i = 0; i < rowCount; i++) {
       var rowState = _boardState[i];
       if (piece != null && _pieceRow == i) {
-        rowState =
-            rowState.replaceRange(0, piece._piece[0].length, piece._piece[0]);
+        rowState = rowState.replaceRange(
+            _pieceCol, _pieceCol + piece._piece[0].length, piece._piece[0]);
       }
       stateStr += rowState;
       if ((i + 1) < rowCount) {
@@ -68,8 +69,11 @@ class Game {
   }
 
   void _placeNewPiece() {
+    var nextPiece = _pieceProvider.take(1).first;
+
     _pieceRow = 0;
-    _currentPiece = _pieceProvider.take(1).first;
+    _pieceCol = ((colCount - nextPiece._piece[0].length) / 2).round();
+    _currentPiece = nextPiece;
   }
 
   void _landPiece(int pieceRow, Piece piece) {
