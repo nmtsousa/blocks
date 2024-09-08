@@ -97,7 +97,7 @@ void main() {
         ]));
   });
 
-  test('Pieces start in the middle of the board.', () {
+  test('Pieces start in the middle of the board', () {
     var game = buildGame([
       '   ',
     ]);
@@ -110,7 +110,7 @@ void main() {
         ]));
   });
 
-  test('Pieces land if they hit something on the way down.', () {
+  test('Pieces land if they hit something on the way down', () {
     var game = buildGame([
       '   ',
       ' X ',
@@ -124,6 +124,19 @@ void main() {
           ' P ',
           ' X ',
         ]));
+  });
+
+  test(
+      'Game ends if there is no space for next piece when the current one lands',
+      () {
+    var game = buildGame([
+      '   ',
+      ' X ',
+    ]);
+
+    game.tick();
+    game.tick();
+    expect(game.state, equals(State.gameOver));
   });
 }
 

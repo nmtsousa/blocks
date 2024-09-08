@@ -56,10 +56,6 @@ class Game {
   }
 
   void tick() {
-    if (_boardState[0].substring(0, 1) != ' ') {
-      state = State.gameOver;
-    }
-
     var piece = _currentPiece;
     if (piece == null) {
       _placeNewPiece();
@@ -68,14 +64,8 @@ class Game {
       if (_pieceRow + piece.rowCount >= rowCount) {
         shouldLand = true;
       } else {
-        outer:
-        for (int row = 0; row < piece.rowCount; row++) {
-          for (int col = 0; col < piece.colCount; col++) {
-            if (_boardState[_pieceRow + row + 1][_pieceCol + col] != " ") {
-              shouldLand = true;
-              break outer;
-            }
-          }
+        if (!piceFitsInBoard(piece, _pieceRow + 1, _pieceCol)) {
+          shouldLand = true;
         }
       }
       if (shouldLand) {
@@ -92,6 +82,12 @@ class Game {
 
     _pieceRow = 0;
     _pieceCol = ((colCount - nextPiece.colCount) / 2).round();
+
+    if (!piceFitsInBoard(nextPiece, _pieceRow, _pieceCol)) {
+      state = State.gameOver;
+      _currentPiece = null;
+    }
+
     _currentPiece = nextPiece;
   }
 
@@ -100,5 +96,16 @@ class Game {
       _boardState[_pieceRow + i] = _boardState[_pieceRow + i]
           .replaceRange(_pieceCol, _pieceCol + piece.colCount, piece._piece[i]);
     }
+  }
+
+  bool piceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
+    for (int row = 0; row < piece.rowCount; row++) {
+      for (int col = 0; col < piece.colCount; col++) {
+        if (_boardState[pieceRow + row][pieceCol + col] != " ") {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
