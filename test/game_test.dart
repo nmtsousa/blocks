@@ -1,4 +1,5 @@
 import 'package:blocks/game.dart';
+import 'package:blocks/piece.dart';
 import 'package:test/test.dart';
 
 void main() {

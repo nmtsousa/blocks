@@ -1,15 +1,6 @@
+import 'package:blocks/piece.dart';
+
 enum State { running, gameOver }
-
-class Piece {
-  List<String> _piece;
-  late int rowCount;
-  late int colCount;
-
-  Piece(this._piece) {
-    rowCount = _piece.length;
-    colCount = _piece[0].length;
-  }
-}
 
 class Game {
   final Iterable<Piece> _pieceProvider;
@@ -44,7 +35,7 @@ class Game {
       var rowState = _boardState[i];
       if (piece != null && _pieceRow == i) {
         rowState = rowState.replaceRange(
-            _pieceCol, _pieceCol + piece.colCount, piece._piece[0]);
+            _pieceCol, _pieceCol + piece.colCount, piece.piece[0]);
       }
       stateStr += rowState;
       if ((i + 1) < rowCount) {
@@ -92,9 +83,9 @@ class Game {
   }
 
   void _landPiece(Piece piece) {
-    for (int i = 0; i < piece._piece.length; i++) {
+    for (int i = 0; i < piece.piece.length; i++) {
       _boardState[_pieceRow + i] = _boardState[_pieceRow + i]
-          .replaceRange(_pieceCol, _pieceCol + piece.colCount, piece._piece[i]);
+          .replaceRange(_pieceCol, _pieceCol + piece.colCount, piece.piece[i]);
     }
   }
 
