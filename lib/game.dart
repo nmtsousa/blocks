@@ -33,17 +33,15 @@ class Game {
 
   @override
   String toString() {
-    var piece = _currentPiece;
 
     var stateStr = '[';
 
     for (int row = 0; row < rowCount; row++) {
       var rowState = _boardState[row];
-      if (piece != null &&
-          row >= _pieceRow &&
-          row < _pieceRow + piece.getRowCount()) {
-        for (int col = 0; col < piece.getColCount(); col++) {
-          var pixel = piece.getPixel(row - _pieceRow, col);
+      if (row >= _pieceRow &&
+          row < _pieceRow + _currentPiece.getRowCount()) {
+        for (int col = 0; col < _currentPiece.getColCount(); col++) {
+          var pixel = _currentPiece.getPixel(row - _pieceRow, col);
           if (pixel != ' ') {
             rowState = rowState.replaceRange(
                 _pieceCol + col, _pieceCol + col + 1, pixel);
