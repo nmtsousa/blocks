@@ -499,7 +499,23 @@ Iterable<Piece> createPieceProvider(Piece piece) sync* {
 }
 
 void verifyGameState(Game game, List<String> expectedState) {
-  expect(game.toString(), equalsGame(expectedState));
+  expect(gameStateToString(game), equalsGame(expectedState));
+}
+
+String gameStateToString(Game game) {
+  var boardState = game.getBoardState();
+  var rowCount = boardState.rows.length;
+
+  var stateStr = '[';
+  for (int row = 0; row < rowCount; row++) {
+    stateStr += boardState.rows[row];
+    if ((row + 1) < rowCount) {
+      stateStr += ']\n[';
+    }
+  }
+  stateStr += ']';
+
+  return stateStr;
 }
 
 Matcher equalsGame(List<String> rows) {

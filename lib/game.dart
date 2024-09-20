@@ -57,22 +57,6 @@ class Game {
     return BoardState(rows: rows);
   }
 
-  @override
-  String toString() {
-    var stateStr = '[';
-
-    var boardState = getBoardState();
-    for (int row = 0; row < rowCount; row++) {
-      stateStr += boardState.rows[row];
-      if ((row + 1) < rowCount) {
-        stateStr += ']\n[';
-      }
-    }
-
-    stateStr += ']';
-    return stateStr;
-  }
-
   void tick() {
     var shouldLand = false;
     if (_pieceRow + _currentPiece.getRowCount() >= rowCount) {
