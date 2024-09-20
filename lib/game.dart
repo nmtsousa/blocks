@@ -2,6 +2,12 @@ import 'package:blocks/piece.dart';
 
 enum State { running, gameOver }
 
+final class BoardState {
+  final List<String> rows;
+
+  BoardState({required this.rows});
+}
+
 class Game {
   final Iterable<Piece> _pieceProvider;
   late Piece _currentPiece;
@@ -31,15 +37,12 @@ class Game {
     return _state;
   }
 
-  @override
-  String toString() {
-
-    var stateStr = '[';
+  BoardState getBoardState() {
+    List<String> rows = List.empty(growable: true);
 
     for (int row = 0; row < rowCount; row++) {
       var rowState = _boardState[row];
-      if (row >= _pieceRow &&
-          row < _pieceRow + _currentPiece.getRowCount()) {
+      if (row >= _pieceRow && row < _pieceRow + _currentPiece.getRowCount()) {
         for (int col = 0; col < _currentPiece.getColCount(); col++) {
           var pixel = _currentPiece.getPixel(row - _pieceRow, col);
           if (pixel != ' ') {
@@ -48,11 +51,24 @@ class Game {
           }
         }
       }
-      stateStr += rowState;
+      rows.add(rowState);
+    }
+
+    return BoardState(rows: rows);
+  }
+
+  @override
+  String toString() {
+    var stateStr = '[';
+
+    var boardState = getBoardState();
+    for (int row = 0; row < rowCount; row++) {
+      stateStr += boardState.rows[row];
       if ((row + 1) < rowCount) {
         stateStr += ']\n[';
       }
     }
+
     stateStr += ']';
     return stateStr;
   }
