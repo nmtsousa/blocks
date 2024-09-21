@@ -33,6 +33,13 @@ class Game {
     _placeNewPiece();
   }
 
+  Game.empty(this._pieceProvider, this.colCount, this.rowCount) {
+    _boardState = List.filled(rowCount, _spaces(colCount));
+    _placeNewPiece();
+  }
+
+  String _spaces(n) => List.filled(n, ' ').join();
+
   GameState getState() {
     return _state;
   }

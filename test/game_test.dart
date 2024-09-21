@@ -34,6 +34,21 @@ void main() {
     expect(game.getState(), equals(GameState.running));
   });
 
+  test('Game can be initialized by providing dimensions', () {
+    var game = Game.empty(
+        createPieceProvider(Piece([
+          PieceSprite(['P'])
+        ])),
+        3,
+        3);
+    expect(game.getState(), equals(GameState.running));
+    verifyGameState(game, [
+      ' P ',
+      '   ',
+      '   ',
+    ]);
+  });
+
   test('Game is over when there is no space for the next piece', () {
     var game = buildGame([
       'X',
