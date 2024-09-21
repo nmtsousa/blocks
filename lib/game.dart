@@ -1,6 +1,6 @@
 import 'package:blocks/piece.dart';
 
-enum State { running, gameOver }
+enum GameState { running, gameOver }
 
 final class BoardState {
   final List<String> rows;
@@ -13,7 +13,7 @@ class Game {
   late Piece _currentPiece;
   int _pieceRow = 0;
   int _pieceCol = 0;
-  State _state = State.running;
+  GameState _state = GameState.running;
   late List<String> _boardState;
   late final int colCount;
   late final int rowCount;
@@ -33,7 +33,7 @@ class Game {
     _placeNewPiece();
   }
 
-  State getState() {
+  GameState getState() {
     return _state;
   }
 
@@ -81,7 +81,7 @@ class Game {
     _pieceCol = ((colCount - _currentPiece.getColCount()) / 2).truncate();
 
     if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
-      _state = State.gameOver;
+      _state = GameState.gameOver;
     }
   }
 

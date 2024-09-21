@@ -31,7 +31,7 @@ void main() {
 
   test('Games starts in the running state', () {
     var game = buildGame([' ']);
-    expect(game.getState(), equals(State.running));
+    expect(game.getState(), equals(GameState.running));
   });
 
   test('Game is over when there is no space for the next piece', () {
@@ -39,7 +39,7 @@ void main() {
       'X',
     ]);
 
-    expect(game.getState(), equals(State.gameOver));
+    expect(game.getState(), equals(GameState.gameOver));
   });
 
   test('Piece enters board when there is space', () {
@@ -47,7 +47,7 @@ void main() {
       ' ',
     ]);
 
-    expect(game.getState(), equals(State.running));
+    expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [
       'P',
     ]);
@@ -61,7 +61,7 @@ void main() {
 
     game.tick();
 
-    expect(game.getState(), equals(State.running));
+    expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [
       ' ',
       'P',
@@ -77,7 +77,7 @@ void main() {
     game.tick();
     game.tick();
 
-    expect(game.getState(), equals(State.running));
+    expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [
       'P',
       'P',
@@ -116,7 +116,7 @@ void main() {
     ]);
 
     game.tick();
-    expect(game.getState(), equals(State.gameOver));
+    expect(game.getState(), equals(GameState.gameOver));
   });
 
   test('When large piece does not fit the board, game is over.', () {
@@ -127,7 +127,7 @@ void main() {
       '   ',
     ]);
 
-    expect(game.getState(), equals(State.gameOver));
+    expect(game.getState(), equals(GameState.gameOver));
   });
 
   test('Piece with holes can appear on board', () {
@@ -203,7 +203,7 @@ void main() {
     ]);
 
     game.tick();
-    expect(game.getState(), State.gameOver);
+    expect(game.getState(), GameState.gameOver);
   });
 
   test('It is possible to move pieces to the left', () {
