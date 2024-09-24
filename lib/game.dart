@@ -18,26 +18,26 @@ class Game {
   int _pieceCol = 0;
   GameState _state = GameState.running;
   late List<String> _boardState;
-  late final int colCount;
-  late final int rowCount;
+  late final int _colCount;
+  late final int _rowCount;
 
   Game.fromState(this._pieceProvider, List<String> initialState) {
     assert(initialState.isNotEmpty);
 
-    colCount = initialState[0].length;
-    assert(colCount > 0);
+    _colCount = initialState[0].length;
+    assert(_colCount > 0);
 
     for (int i = 1; i < initialState.length; i++) {
-      assert(initialState[i].length == colCount);
+      assert(initialState[i].length == _colCount);
     }
     _boardState = initialState;
-    rowCount = _boardState.length;
+    _rowCount = _boardState.length;
 
     _placeNewPiece();
   }
 
-  Game.empty(this._pieceProvider, this.colCount, this.rowCount) {
-    _boardState = List.filled(rowCount, _spaces(colCount));
+  Game.empty(this._pieceProvider, this._colCount, this._rowCount) {
+    _boardState = List.filled(_rowCount, _spaces(_colCount));
     _placeNewPiece();
   }
 
@@ -50,7 +50,7 @@ class Game {
   BoardState getBoardState() {
     List<String> rows = List.empty(growable: true);
 
-    for (int row = 0; row < rowCount; row++) {
+    for (int row = 0; row < _rowCount; row++) {
       var rowState = _boardState[row];
       if (row >= _pieceRow && row < _pieceRow + _currentPiece.getRowCount()) {
         for (int col = 0; col < _currentPiece.getColCount(); col++) {
@@ -69,7 +69,7 @@ class Game {
 
   void tick() {
     var shouldLand = false;
-    if (_pieceRow + _currentPiece.getRowCount() >= rowCount) {
+    if (_pieceRow + _currentPiece.getRowCount() >= _rowCount) {
       shouldLand = true;
     } else {
       if (!_pieceFitsInBoard(_currentPiece, _pieceRow + 1, _pieceCol)) {
@@ -88,7 +88,7 @@ class Game {
     _currentPiece = _pieceProvider.take(1).first;
 
     _pieceRow = 0;
-    _pieceCol = ((colCount - _currentPiece.getColCount()) / 2).truncate();
+    _pieceCol = ((_colCount - _currentPiece.getColCount()) / 2).truncate();
 
     if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
       _state = GameState.gameOver;
@@ -109,12 +109,12 @@ class Game {
 
   bool _pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
     for (int row = 0; row < piece.getRowCount(); row++) {
-      if (pieceRow + row >= rowCount) {
+      if (pieceRow + row >= _rowCount) {
         return false;
       }
 
       for (int col = 0; col < piece.getColCount(); col++) {
-        if (pieceCol + col >= colCount) {
+        if (pieceCol + col >= _colCount) {
           return false;
         }
 
@@ -147,7 +147,7 @@ class Game {
   }
 
   void moveRight() {
-    if (_pieceCol == colCount - 1) {
+    if (_pieceCol == _colCount - 1) {
       return;
     } else {
       for (int row = 0; row < _currentPiece.getRowCount(); row++) {

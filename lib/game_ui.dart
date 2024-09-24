@@ -1,10 +1,10 @@
-import 'package:blocks/main.dart';
+import 'package:blocks/game_notifier.dart';
 import 'package:flutter/material.dart';
 
 class GameUI extends StatelessWidget {
   final GameNotifier _gameStateNotifier;
 
-  GameUI(this._gameStateNotifier, {super.key});
+  const GameUI(this._gameStateNotifier, {super.key});
 
   @override
   Widget build(BuildContext context) {

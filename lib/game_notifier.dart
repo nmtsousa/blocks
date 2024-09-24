@@ -16,6 +16,9 @@ class GameNotifier extends ChangeNotifier {
         15);
   }
 
+  @visibleForTesting
+  GameNotifier.fromGame(this._game);
+
   static Iterable<Piece> _createPieceProvider(Piece piece) sync* {
     while (true) {
       yield piece;
