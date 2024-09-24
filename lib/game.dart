@@ -5,6 +5,9 @@ enum GameState { running, gameOver }
 final class BoardState {
   final List<String> rows;
 
+  int get colCount => rows[0].length;
+  int get rowCount => rows.length;
+
   BoardState({required this.rows});
 }
 
