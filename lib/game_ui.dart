@@ -2,7 +2,7 @@ import 'package:blocks/main.dart';
 import 'package:flutter/material.dart';
 
 class GameUI extends StatelessWidget {
-  final BoardStateNotifier _gameStateNotifier;
+  final GameNotifier _gameStateNotifier;
 
   GameUI(this._gameStateNotifier, {super.key});
 

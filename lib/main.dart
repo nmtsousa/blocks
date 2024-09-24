@@ -6,7 +6,7 @@ import 'package:blocks/piece.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  BoardStateNotifier boardStateNotifier = BoardStateNotifier();
+  GameNotifier boardStateNotifier = GameNotifier();
 
   runApp(MyApp(boardStateNotifier));
 
@@ -19,12 +19,12 @@ void main() {
   });
 }
 
-class BoardStateNotifier extends ChangeNotifier {
+class GameNotifier extends ChangeNotifier {
   late Game _game;
   BoardState get boardState => _game.getBoardState();
   GameState get gameState => _game.getState();
 
-  BoardStateNotifier() {
+  GameNotifier() {
     _game = Game.empty(
         _createPieceProvider(Piece([
           PieceSprite(['P'])
@@ -46,7 +46,7 @@ class BoardStateNotifier extends ChangeNotifier {
 }
 
 class MyApp extends StatelessWidget {
-  final BoardStateNotifier _boardStateNotifier;
+  final GameNotifier _boardStateNotifier;
 
   const MyApp(this._boardStateNotifier, {super.key});
 
