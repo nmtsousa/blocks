@@ -35,14 +35,11 @@ class GameUI extends StatelessWidget {
           ));
         }
 
-        return Scaffold(
-          backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
-          body: Center(
-            child: AspectRatio(
-              aspectRatio: colCount / rowCount,
-              child: Column(
-                children: rowList,
-              ),
+        return Center(
+          child: AspectRatio(
+            aspectRatio: colCount / rowCount,
+            child: Column(
+              children: rowList,
             ),
           ),
         );

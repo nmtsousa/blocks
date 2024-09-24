@@ -27,7 +27,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: GameUI(_boardStateNotifier),
-    );
+        home: Scaffold(
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
+      body: GameUI(_boardStateNotifier),
+    ));
   }
 }
