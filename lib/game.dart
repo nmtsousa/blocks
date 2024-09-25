@@ -108,6 +108,10 @@ class Game {
   }
 
   bool _pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
+    if (pieceCol < 0) {
+      return false;
+    }
+
     for (int row = 0; row < piece.getRowCount(); row++) {
       if (pieceRow + row >= _rowCount) {
         return false;
@@ -132,21 +136,9 @@ class Game {
       return;
     }
 
-    if (_pieceCol == 0) {
-      return;
-    } else {
-      for (int row = 0; row < _currentPiece.getRowCount(); row++) {
-        for (int col = 0; col < _currentPiece.getColCount(); col++) {
-          if (_currentPiece.getPixel(row, col) == ' ') {
-            continue;
-          }
-
-          if (_boardState[_pieceRow + row][_pieceCol + col - 1] != ' ') {
-            return;
-          }
-        }
-      }
-      _pieceCol--;
+    _pieceCol--;
+    if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
+      _pieceCol++;
     }
   }
 
@@ -155,22 +147,9 @@ class Game {
       return;
     }
 
-    if (_pieceCol == _colCount - 1) {
-      return;
-    } else {
-      for (int row = 0; row < _currentPiece.getRowCount(); row++) {
-        for (int col = 0; col < _currentPiece.getColCount(); col++) {
-          if (_currentPiece.getPixel(row, col) == ' ') {
-            continue;
-          }
-
-          if (_boardState[_pieceRow + row][_pieceCol + col + 1] != ' ') {
-            return;
-          }
-        }
-      }
-
-      _pieceCol++;
+    _pieceCol++;
+    if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
+      _pieceCol--;
     }
   }
 
