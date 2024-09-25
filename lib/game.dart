@@ -128,6 +128,10 @@ class Game {
   }
 
   void moveLeft() {
+    if (_state == GameState.gameOver) {
+      return;
+    }
+
     if (_pieceCol == 0) {
       return;
     } else {
@@ -147,6 +151,10 @@ class Game {
   }
 
   void moveRight() {
+    if (_state == GameState.gameOver) {
+      return;
+    }
+
     if (_pieceCol == _colCount - 1) {
       return;
     } else {
@@ -167,6 +175,10 @@ class Game {
   }
 
   void rotatePiece() {
+    if (_state == GameState.gameOver) {
+      return;
+    }
+
     _currentPiece.rotate(1);
     if (!_pieceFitsInBoard(_currentPiece, _pieceRow, _pieceCol)) {
       _currentPiece.rotate(-1);

@@ -292,6 +292,23 @@ void main() {
     ]);
   });
 
+  test('You can not move pieces left once the game is over.', () {
+    var game = buildGame([
+      '   ',
+      ' X ',
+    ]);
+
+    game.tick();
+
+    expect(game.getState(), equals(GameState.gameOver));
+
+    game.moveLeft();
+    verifyGameState(game, [
+      ' P ',
+      ' X ',
+    ]);
+  });
+
   test('It is possible to move pieces to the right', () {
     var game = buildGame([
       '   ',
@@ -382,6 +399,23 @@ void main() {
     ]);
   });
 
+  test('You can not move pieces right once the game is over.', () {
+    var game = buildGame([
+      '   ',
+      ' X ',
+    ]);
+
+    game.tick();
+
+    expect(game.getState(), equals(GameState.gameOver));
+
+    game.moveRight();
+    verifyGameState(game, [
+      ' P ',
+      ' X ',
+    ]);
+  });
+
   test('You can rotate pieces.', () {
     var game = buildGameWithPiece(
         Piece([
@@ -461,6 +495,36 @@ void main() {
       'PPP ',
       'P   ',
       ' X  ',
+    ]);
+  });
+
+  test('You can not rotate a piece once the game is over.', () {
+    var game = buildGameWithPiece(
+        Piece([
+          PieceSprite([
+            'PPP',
+            'P  ',
+          ]),
+          PieceSprite([
+            'PP',
+            ' P',
+            ' P',
+          ])
+        ]),
+        [
+          '    ',
+          '    ',
+        ]);
+
+    game.tick();
+    game.tick();
+
+    expect(game.getState(), equals(GameState.gameOver));
+
+    game.rotatePiece();
+    verifyGameState(game, [
+      'PPP ',
+      'P   ',
     ]);
   });
 
