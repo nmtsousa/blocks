@@ -7,23 +7,12 @@ class GameNotifier extends ChangeNotifier {
   BoardState get boardState => _game.getBoardState();
   GameState get gameState => _game.getState();
 
-  GameNotifier() {
-    _game = Game.empty(
-        _createPieceProvider(Piece([
-          PieceSprite(['P'])
-        ])),
-        10,
-        15);
+  GameNotifier(Iterable<Piece> pieceProvider) {
+    _game = Game.empty(pieceProvider, 10, 15);
   }
 
   @visibleForTesting
   GameNotifier.fromGame(this._game);
-
-  static Iterable<Piece> _createPieceProvider(Piece piece) sync* {
-    while (true) {
-      yield piece;
-    }
-  }
 
   void tick() {
     _game.tick();

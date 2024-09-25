@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:blocks/game.dart';
 import 'package:blocks/game_notifier.dart';
@@ -6,8 +7,10 @@ import 'package:blocks/game_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'piece.dart';
+
 void main() {
-  GameNotifier boardStateNotifier = GameNotifier();
+  GameNotifier boardStateNotifier = GameNotifier(_createPieceProvider());
 
   runApp(MyApp(boardStateNotifier));
 
@@ -29,11 +32,54 @@ void main() {
           case LogicalKeyboardKey.arrowRight:
             boardStateNotifier.moveRight();
             break;
+          case LogicalKeyboardKey.arrowUp:
+            boardStateNotifier.rotate();
+            break;
         }
       }
       return false;
     },
   );
+}
+
+Iterable<Piece> _createPieceProvider() sync* {
+  var rng = Random();
+  while (true) {
+    switch (rng.nextInt(2)) {
+      case 0:
+        yield Piece([
+          PieceSprite([
+            'PP',
+            'PP',
+          ])
+        ]);
+        break;
+      case 1:
+        yield Piece([
+          PieceSprite([
+            'PPP',
+            'P  ',
+            '   ',
+          ]),
+          PieceSprite([
+            'PP ',
+            ' P ',
+            ' P ',
+          ]),
+          PieceSprite([
+            '  P',
+            'PPP',
+            '   ',
+          ]),
+          PieceSprite([
+            'P  ',
+            'P  ',
+            'PP ',
+          ]),
+        ]);
+        break;
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
