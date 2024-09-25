@@ -29,4 +29,19 @@ class GameNotifier extends ChangeNotifier {
     _game.tick();
     notifyListeners();
   }
+
+  void moveLeft() {
+    _game.moveLeft();
+    notifyListeners();
+  }
+
+  void rotate() {
+    _game.rotatePiece();
+    notifyListeners();
+  }
+
+  moveRight() {
+    _game.moveRight();
+    notifyListeners();
+  }
 }
