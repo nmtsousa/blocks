@@ -35,6 +35,9 @@ void main() {
           case LogicalKeyboardKey.arrowUp:
             boardStateNotifier.rotate();
             break;
+          case LogicalKeyboardKey.arrowDown:
+            boardStateNotifier.tick();
+            break;
         }
       }
       return false;
@@ -45,7 +48,7 @@ void main() {
 Iterable<Piece> _createPieceProvider() sync* {
   var rng = Random();
   while (true) {
-    switch (rng.nextInt(2)) {
+    switch (rng.nextInt(6)) {
       case 0:
         yield Piece([
           PieceSprite([
@@ -59,22 +62,81 @@ Iterable<Piece> _createPieceProvider() sync* {
           PieceSprite([
             'PPP',
             'P  ',
-            '   ',
           ]),
           PieceSprite([
-            'PP ',
-            ' P ',
-            ' P ',
+            'PP',
+            ' P',
+            ' P',
           ]),
           PieceSprite([
             '  P',
             'PPP',
-            '   ',
           ]),
           PieceSprite([
+            'P ',
+            'P ',
+            'PP',
+          ]),
+        ]);
+        break;
+      case 2:
+        yield Piece([
+          PieceSprite([
             'P  ',
-            'P  ',
+            'PPP',
+          ]),
+          PieceSprite([
+            'PP',
+            'P ',
+            'P ',
+          ]),
+          PieceSprite([
+            'PPP',
+            '  P',
+          ]),
+          PieceSprite([
+            ' P',
+            ' P',
+            'PP',
+          ]),
+        ]);
+        break;
+      case 3:
+        yield Piece([
+          PieceSprite([
             'PP ',
+            ' PP',
+          ]),
+          PieceSprite([
+            ' P',
+            'PP',
+            'P ',
+          ]),
+        ]);
+        break;
+      case 4:
+        yield Piece([
+          PieceSprite([
+            ' PP',
+            'PP ',
+          ]),
+          PieceSprite([
+            'P ',
+            'PP',
+            ' P',
+          ]),
+        ]);
+        break;
+      case 5:
+        yield Piece([
+          PieceSprite([
+            'PPPP',
+          ]),
+          PieceSprite([
+            'P',
+            'P',
+            'P',
+            'P',
           ]),
         ]);
         break;
