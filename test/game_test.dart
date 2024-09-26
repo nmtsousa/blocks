@@ -85,8 +85,8 @@ void main() {
 
   test('Pieces land when they reach the last row', () {
     var game = buildGame([
-      ' ',
-      ' ',
+      '   ',
+      '   ',
     ]);
 
     game.tick();
@@ -94,8 +94,8 @@ void main() {
 
     expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [
-      'P',
-      'P',
+      ' P ',
+      ' P ',
     ]);
   });
 
@@ -554,6 +554,42 @@ void main() {
       ' PP',
       '  P',
       '  P',
+    ]);
+  });
+
+  test('Completed lines are removed when the piece falls.', () {
+    var game = buildGame([
+      '   ',
+      'X X',
+    ]);
+
+    game.tick();
+    game.tick();
+
+    expect(game.getState(), equals(GameState.running));
+    verifyGameState(game, [
+      ' P ',
+      '   ',
+    ]);
+  });
+
+  test(
+      'Completed lines are removed event if they are in the middle of the board.',
+      () {
+    var game = buildGame([
+      '   ',
+      'X X',
+      ' X ',
+    ]);
+
+    game.tick();
+    game.tick();
+
+    expect(game.getState(), equals(GameState.running));
+    verifyGameState(game, [
+      ' P ',
+      '   ',
+      ' X ',
     ]);
   });
 }

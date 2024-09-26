@@ -78,6 +78,7 @@ class Game {
     }
     if (shouldLand) {
       _landPiece(_currentPiece);
+      _removeCompletedLines();
       _placeNewPiece();
     } else {
       _pieceRow++;
@@ -104,6 +105,31 @@ class Game {
               .replaceRange(_pieceCol + col, _pieceCol + col + 1, pixel);
         }
       }
+    }
+  }
+
+  void _removeCompletedLines() {
+    List<int> completedRows = [];
+    for (int row = 0; row < _rowCount; row++) {
+      bool rowIsComplete = true;
+      for (int col = 0; col < _colCount; col++) {
+        var pixel = _boardState[row].substring(col, col + 1);
+        if (pixel == ' ') {
+          rowIsComplete = false;
+          break;
+        }
+      }
+
+      if (rowIsComplete) {
+        completedRows.add(row);
+      }
+    }
+
+    for (var rowToRemove in completedRows) {
+      for (int row = rowToRemove; row > 0; row--) {
+        _boardState[row] = _boardState[row - 1];
+      }
+      _boardState[0] = _spaces(_colCount);
     }
   }
 
