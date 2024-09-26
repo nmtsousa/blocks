@@ -48,7 +48,7 @@ void main() {
 Iterable<Piece> _createPieceProvider() sync* {
   var rng = Random();
   while (true) {
-    switch (rng.nextInt(6)) {
+    switch (rng.nextInt(7)) {
       case 0:
         yield Piece([
           PieceSprite([
@@ -137,6 +137,28 @@ Iterable<Piece> _createPieceProvider() sync* {
             'P',
             'P',
             'P',
+          ]),
+        ]);
+        break;
+      case 6:
+        yield Piece([
+          PieceSprite([
+            'PPP',
+            ' P ',
+          ]),
+          PieceSprite([
+            ' P',
+            'PP',
+            ' P',
+          ]),
+          PieceSprite([
+            ' P ',
+            'PPP',
+          ]),
+          PieceSprite([
+            'P ',
+            'PP',
+            'P ',
           ]),
         ]);
         break;
