@@ -4,13 +4,14 @@ import 'package:blocks/game.dart';
 import 'package:blocks/game_notifier.dart';
 import 'package:blocks/game_pieces.dart';
 import 'package:blocks/game_ui.dart';
+import 'package:blocks/block_game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
   GameNotifier boardStateNotifier = GameNotifier(createGamePieceProvider());
 
-  runApp(MyApp(boardStateNotifier));
+  runApp(const BlockGame()); //MyApp(boardStateNotifier));
 
   Duration frameRate = const Duration(milliseconds: 300);
   Timer.periodic(frameRate, (timer) {
