@@ -14,11 +14,12 @@ class BlockGame extends StatefulWidget {
   State<BlockGame> createState() => _BlockGameState();
 }
 
-enum _GameState { home, play, gameOver }
+enum _GameState { home, play, pause, gameOver }
 
-class _BlockGameState extends State<BlockGame> {
+class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   _GameState _state = _GameState.home;
   GameNotifier _boardStateNotifier = GameNotifier(createGamePieceProvider());
+  Timer? _timer;
 
   _BlockGameState() {
     ServicesBinding.instance.keyboard.addHandler(
@@ -45,6 +46,38 @@ class _BlockGameState extends State<BlockGame> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      switch (state) {
+        case AppLifecycleState.detached:
+        case AppLifecycleState.hidden:
+        case AppLifecycleState.inactive:
+        case AppLifecycleState.paused:
+          if (_state == _GameState.play) {
+            _state = _GameState.pause;
+            _timer?.cancel();
+          }
+          break;
+        case AppLifecycleState.resumed:
+        default:
+          break;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
@@ -67,11 +100,12 @@ class _BlockGameState extends State<BlockGame> {
           body: switch (_state) {
             _GameState.home => _buildMenu(),
             _GameState.play => _buildGame(),
+            _GameState.pause => _buildPauseGame(),
             _GameState.gameOver => _buildGameOver(),
           },
           bottomNavigationBar: switch (_state) {
             _GameState.home => null,
-            _GameState.play || _GameState.gameOver => Row(
+            _GameState.play || _GameState.pause || _GameState.gameOver => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
@@ -174,20 +208,44 @@ class _BlockGameState extends State<BlockGame> {
     );
   }
 
+  _buildPauseGame() {
+    return Center(
+      child: Column(
+        children: [
+          const Spacer(),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                _state = _GameState.play;
+                _startTimer();
+              });
+            },
+            child: const Text('Resume Game'),
+          ),
+          const Spacer(),
+        ],
+      ),
+    );
+  }
+
   void _startNewGame() {
     setState(() {
       _boardStateNotifier = GameNotifier(createGamePieceProvider());
       _state = _GameState.play;
-      Duration frameRate = const Duration(milliseconds: 300);
-      Timer.periodic(frameRate, (timer) {
-        _boardStateNotifier.tick();
-        if (_boardStateNotifier.gameState == GameState.gameOver) {
-          timer.cancel();
-          setState(() {
-            _state = _GameState.gameOver;
-          });
-        }
-      });
+      _startTimer();
+    });
+  }
+
+  void _startTimer() {
+    Duration frameRate = const Duration(milliseconds: 300);
+    _timer = Timer.periodic(frameRate, (timer) {
+      _boardStateNotifier.tick();
+      if (_boardStateNotifier.gameState == GameState.gameOver) {
+        timer.cancel();
+        setState(() {
+          _state = _GameState.gameOver;
+        });
+      }
     });
   }
 }
