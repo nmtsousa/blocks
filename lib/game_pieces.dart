@@ -9,113 +9,113 @@ Iterable<Piece> createGamePieceProvider() sync* {
       case 0:
         yield Piece([
           PieceSprite([
-            'PP',
-            'PP',
+            'AA',
+            'AA',
           ])
         ]);
         break;
       case 1:
         yield Piece([
           PieceSprite([
-            'PPP',
-            'P  ',
+            'BBB',
+            'B  ',
           ]),
           PieceSprite([
-            'PP',
-            ' P',
-            ' P',
+            'BB',
+            ' B',
+            ' B',
           ]),
           PieceSprite([
-            '  P',
-            'PPP',
+            '  B',
+            'BBB',
           ]),
           PieceSprite([
-            'P ',
-            'P ',
-            'PP',
+            'B ',
+            'B ',
+            'BB',
           ]),
         ]);
         break;
       case 2:
         yield Piece([
           PieceSprite([
-            'P  ',
-            'PPP',
+            'C  ',
+            'CCC',
           ]),
           PieceSprite([
-            'PP',
-            'P ',
-            'P ',
+            'CC',
+            'C ',
+            'C ',
           ]),
           PieceSprite([
-            'PPP',
-            '  P',
+            'CCC',
+            '  C',
           ]),
           PieceSprite([
-            ' P',
-            ' P',
-            'PP',
+            ' C',
+            ' C',
+            'CC',
           ]),
         ]);
         break;
       case 3:
         yield Piece([
           PieceSprite([
-            'PP ',
-            ' PP',
+            'DD ',
+            ' DD',
           ]),
           PieceSprite([
-            ' P',
-            'PP',
-            'P ',
+            ' D',
+            'DD',
+            'D ',
           ]),
         ]);
         break;
       case 4:
         yield Piece([
           PieceSprite([
-            ' PP',
-            'PP ',
+            ' EE',
+            'EE ',
           ]),
           PieceSprite([
-            'P ',
-            'PP',
-            ' P',
+            'E ',
+            'EE',
+            ' E',
           ]),
         ]);
         break;
       case 5:
         yield Piece([
           PieceSprite([
-            'PPPP',
+            'FFFF',
           ]),
           PieceSprite([
-            'P',
-            'P',
-            'P',
-            'P',
+            'F',
+            'F',
+            'F',
+            'F',
           ]),
         ]);
         break;
       case 6:
         yield Piece([
           PieceSprite([
-            'PPP',
-            ' P ',
+            'GGG',
+            ' G ',
           ]),
           PieceSprite([
-            ' P',
-            'PP',
-            ' P',
+            ' G',
+            'GG',
+            ' G',
           ]),
           PieceSprite([
-            ' P ',
-            'PPP',
+            ' G ',
+            'GGG',
           ]),
           PieceSprite([
-            'P ',
-            'PP',
-            'P ',
+            'G ',
+            'GG',
+            'G ',
           ]),
         ]);
         break;

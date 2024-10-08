@@ -19,12 +19,18 @@ class GameUI extends StatelessWidget {
         for (int row = 0; row < rowCount; row++) {
           List<Widget> rowPixels = [];
           for (int col = 0; col < colCount; col++) {
-            Color pixelColor = Colors.grey[900]!;
-
             var pixelType = boardState.rows[row][col];
-            if (pixelType != ' ') {
-              pixelColor = Colors.white;
-            }
+            Color pixelColor = switch (pixelType) {
+              'A' => Colors.red,
+              'B' => Colors.blue,
+              'C' => Colors.green,
+              'D' => Colors.orange,
+              'E' => Colors.purple,
+              'F' => Colors.pink,
+              'G' => Colors.lime,
+              ' ' => Colors.grey[900]!,
+              _ => Colors.white,
+            };
 
             rowPixels.add(Flexible(
               child: _Pixel(color: pixelColor),
