@@ -246,7 +246,9 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   void _startTimer() {
     Duration frameRate = const Duration(milliseconds: 300);
     _timer = Timer.periodic(frameRate, (timer) {
-      _score += _boardStateNotifier.tick();
+      setState(() {
+        _score += _boardStateNotifier.tick();
+      });
       if (_boardStateNotifier.gameState == GameState.gameOver) {
         timer.cancel();
         setState(() {
