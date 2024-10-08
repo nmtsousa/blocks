@@ -248,13 +248,11 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     _timer = Timer.periodic(frameRate, (timer) {
       setState(() {
         _score += _boardStateNotifier.tick();
-      });
-      if (_boardStateNotifier.gameState == GameState.gameOver) {
-        timer.cancel();
-        setState(() {
+        if (_boardStateNotifier.gameState == GameState.gameOver) {
+          timer.cancel();
           _state = _GameState.gameOver;
-        });
-      }
+        }
+      });
     });
   }
 }
