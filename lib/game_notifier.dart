@@ -14,9 +14,10 @@ class GameNotifier extends ChangeNotifier {
   @visibleForTesting
   GameNotifier.fromGame(this._game);
 
-  void tick() {
-    _game.tick();
+  int tick() {
+    int result = _game.tick();
     notifyListeners();
+    return result;
   }
 
   void moveLeft() {

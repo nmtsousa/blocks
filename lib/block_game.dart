@@ -19,6 +19,7 @@ enum _GameState { home, play, pause, gameOver }
 class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   _GameState _state = _GameState.home;
   GameNotifier _boardStateNotifier = GameNotifier(createGamePieceProvider());
+  int _score = 0;
   Timer? _timer;
 
   _BlockGameState() {
@@ -95,7 +96,11 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
       ),
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Block Puzzle'),
+            title: Row(children: [
+              const Text('Block Puzzle'),
+              const Spacer(),
+              Text("$_score"),
+            ]),
           ),
           body: switch (_state) {
             _GameState.home => _buildMenu(),
@@ -195,6 +200,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
                 'Game Over!',
                 textScaler: TextScaler.linear(2),
               )),
+          Text("Your score: $_score"),
           const Spacer(),
           TextButton(
             onPressed: () {
@@ -232,6 +238,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     setState(() {
       _boardStateNotifier = GameNotifier(createGamePieceProvider());
       _state = _GameState.play;
+      _score = 0;
       _startTimer();
     });
   }
@@ -239,7 +246,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   void _startTimer() {
     Duration frameRate = const Duration(milliseconds: 300);
     _timer = Timer.periodic(frameRate, (timer) {
-      _boardStateNotifier.tick();
+      _score += _boardStateNotifier.tick();
       if (_boardStateNotifier.gameState == GameState.gameOver) {
         timer.cancel();
         setState(() {
