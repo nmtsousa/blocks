@@ -564,7 +564,8 @@ void main() {
     ]);
 
     game.tick();
-    game.tick();
+
+    expect(game.tick(), equals(1));
 
     expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [
@@ -583,7 +584,8 @@ void main() {
     ]);
 
     game.tick();
-    game.tick();
+
+    expect(game.tick(), equals(1));
 
     expect(game.getState(), equals(GameState.running));
     verifyGameState(game, [

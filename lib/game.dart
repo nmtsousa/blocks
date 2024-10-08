@@ -67,8 +67,10 @@ class Game {
     return BoardState(rows: rows);
   }
 
-  void tick() {
+  int tick() {
+    var removedLines = 0;
     var shouldLand = false;
+
     if (_pieceRow + _currentPiece.getRowCount() >= _rowCount) {
       shouldLand = true;
     } else {
@@ -78,11 +80,12 @@ class Game {
     }
     if (shouldLand) {
       _landPiece(_currentPiece);
-      _removeCompletedLines();
+      removedLines = _removeCompletedLines();
       _placeNewPiece();
     } else {
       _pieceRow++;
     }
+    return removedLines;
   }
 
   void _placeNewPiece() {
@@ -108,7 +111,7 @@ class Game {
     }
   }
 
-  void _removeCompletedLines() {
+  int _removeCompletedLines() {
     List<int> completedRows = [];
     for (int row = 0; row < _rowCount; row++) {
       bool rowIsComplete = true;
@@ -131,6 +134,8 @@ class Game {
       }
       _boardState[0] = _spaces(_colCount);
     }
+
+    return completedRows.length;
   }
 
   bool _pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
