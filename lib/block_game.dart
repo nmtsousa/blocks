@@ -70,6 +70,28 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    ServicesBinding.instance.keyboard.addHandler(
+      (event) {
+        if (event is KeyDownEvent) {
+          switch (event.logicalKey) {
+            case LogicalKeyboardKey.arrowLeft:
+              _moveLeft();
+              break;
+            case LogicalKeyboardKey.arrowRight:
+              _moveRight();
+              break;
+            case LogicalKeyboardKey.arrowUp:
+              _rotate();
+              break;
+            case LogicalKeyboardKey.arrowDown:
+              _moveDown();
+              break;
+          }
+        }
+        return false;
+      },
+    );
   }
 
   @override
@@ -114,27 +136,25 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                      onPressed: () => _boardStateNotifier.moveLeft(),
+                      onPressed: () => _moveLeft(),
                       icon: const Icon(
                         Icons.arrow_left,
                         color: Colors.white,
                       )),
                   IconButton(
-                      onPressed: () => setState(() {
-                            _score += _boardStateNotifier.tick();
-                          }),
+                      onPressed: () => _moveDown(),
                       icon: const Icon(
                         Icons.arrow_downward,
                         color: Colors.white,
                       )),
                   IconButton(
-                      onPressed: () => _boardStateNotifier.rotate(),
+                      onPressed: () => _rotate(),
                       icon: const Icon(
                         Icons.rotate_right,
                         color: Colors.white,
                       )),
                   IconButton(
-                      onPressed: () => _boardStateNotifier.moveRight(),
+                      onPressed: () => _moveRight,
                       icon: const Icon(
                         Icons.arrow_right,
                         color: Colors.white,
@@ -261,6 +281,24 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
           _state = _GameState.gameOver;
         }
       });
+    });
+  }
+
+  void _moveLeft() {
+    _boardStateNotifier.moveLeft();
+  }
+
+  void _moveRight() {
+    _boardStateNotifier.moveRight();
+  }
+
+  void _rotate() {
+    _boardStateNotifier.rotate();
+  }
+
+  void _moveDown() {
+    setState(() {
+      _score += _boardStateNotifier.tick();
     });
   }
 }
