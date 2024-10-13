@@ -74,8 +74,9 @@ class MockGame implements Game {
   var rotateCount = 0;
 
   @override
-  void tick() {
+  int tick() {
     tickCount++;
+    return 0;
   }
 
   @override

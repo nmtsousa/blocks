@@ -4,6 +4,7 @@ import 'package:blocks/game.dart';
 import 'package:blocks/game_notifier.dart';
 import 'package:blocks/game_pieces.dart';
 import 'package:blocks/game_ui.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,30 +22,6 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   GameNotifier _boardStateNotifier = GameNotifier(createGamePieceProvider());
   int _score = 0;
   Timer? _timer;
-
-  _BlockGameState() {
-    ServicesBinding.instance.keyboard.addHandler(
-      (event) {
-        if (event is KeyDownEvent) {
-          switch (event.logicalKey) {
-            case LogicalKeyboardKey.arrowLeft:
-              _boardStateNotifier.moveLeft();
-              break;
-            case LogicalKeyboardKey.arrowRight:
-              _boardStateNotifier.moveRight();
-              break;
-            case LogicalKeyboardKey.arrowUp:
-              _boardStateNotifier.rotate();
-              break;
-            case LogicalKeyboardKey.arrowDown:
-              _boardStateNotifier.tick();
-              break;
-          }
-        }
-        return false;
-      },
-    );
-  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -71,33 +48,20 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    ServicesBinding.instance.keyboard.addHandler(
-      (event) {
-        if (event is KeyDownEvent) {
-          switch (event.logicalKey) {
-            case LogicalKeyboardKey.arrowLeft:
-              _moveLeft();
-              break;
-            case LogicalKeyboardKey.arrowRight:
-              _moveRight();
-              break;
-            case LogicalKeyboardKey.arrowUp:
-              _rotate();
-              break;
-            case LogicalKeyboardKey.arrowDown:
-              _moveDown();
-              break;
-          }
-        }
-        return false;
-      },
-    );
+    FlameAudio.bgm.initialize();
+    FlameAudio.bgm.play("background.mp3", volume: 0.2);
+
+    ServicesBinding.instance.keyboard.addHandler(_keyboardHandler);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+
+    FlameAudio.bgm.stop();
+
+    ServicesBinding.instance.keyboard.removeHandler(_keyboardHandler);
   }
 
   @override
@@ -300,5 +264,25 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     setState(() {
       _score += _boardStateNotifier.tick();
     });
+  }
+
+  bool _keyboardHandler(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      switch (event.logicalKey) {
+        case LogicalKeyboardKey.arrowLeft:
+          _moveLeft();
+          break;
+        case LogicalKeyboardKey.arrowRight:
+          _moveRight();
+          break;
+        case LogicalKeyboardKey.arrowUp:
+          _rotate();
+          break;
+        case LogicalKeyboardKey.arrowDown:
+          _moveDown();
+          break;
+      }
+    }
+    return false;
   }
 }
