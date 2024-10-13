@@ -22,6 +22,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   GameNotifier _boardStateNotifier = GameNotifier(createGamePieceProvider());
   int _score = 0;
   Timer? _timer;
+  bool _bgMusic = true;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -49,7 +50,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     FlameAudio.bgm.initialize();
-    FlameAudio.bgm.play("background.mp3", volume: 0.2);
+    _playBGMusic();
 
     ServicesBinding.instance.keyboard.addHandler(_keyboardHandler);
   }
@@ -86,6 +87,23 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
               const Text('Block Puzzle'),
               const Spacer(),
               Text("$_score"),
+              const Spacer(),
+              IconButton(
+                  onPressed: () => {
+                        setState(() {
+                          if (_bgMusic) {
+                            _bgMusic = false;
+                            FlameAudio.bgm.stop();
+                          } else {
+                            _bgMusic = true;
+                            _playBGMusic();
+                          }
+                        })
+                      },
+                  icon: Icon(
+                    _bgMusic ? Icons.music_note : Icons.music_off,
+                    color: Colors.white,
+                  )),
             ]),
           ),
           body: switch (_state) {
@@ -284,5 +302,9 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
       }
     }
     return false;
+  }
+
+  void _playBGMusic() {
+    FlameAudio.bgm.play("background.mp3", volume: 0.2);
   }
 }

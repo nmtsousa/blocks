@@ -90,6 +90,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-
-assets:
+  assets:
     - assets/audio/background.mp3
+    - assets/audio/button.mp3
+    - assets/audio/down.mp3
+    - assets/audio/game-over.mp3
+    - assets/audio/game-start.mp3
+    - assets/audio/move.mp3
+    - assets/audio/rotate.mp3
+    - assets/audio/score.mp3
