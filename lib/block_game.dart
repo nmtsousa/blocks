@@ -34,7 +34,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
         case AppLifecycleState.paused:
           if (_state == _GameState.play) {
             _state = _GameState.pause;
-            _timer?.cancel();
+            _stopTimer(_timer!);
           }
           break;
         case AppLifecycleState.resumed:
@@ -50,7 +50,6 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     FlameAudio.bgm.initialize();
-    _playBGMusic();
 
     ServicesBinding.instance.keyboard.addHandler(_keyboardHandler);
   }
@@ -60,7 +59,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
 
-    FlameAudio.bgm.stop();
+    _stopBGMusic();
 
     ServicesBinding.instance.keyboard.removeHandler(_keyboardHandler);
   }
@@ -93,10 +92,10 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
                         setState(() {
                           if (_bgMusic) {
                             _bgMusic = false;
-                            FlameAudio.bgm.stop();
+                            _stopBGMusic();
                           } else {
                             _bgMusic = true;
-                            _playBGMusic();
+                            _startBGMusic();
                           }
                         })
                       },
@@ -254,16 +253,22 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   }
 
   void _startTimer() {
+    _startBGMusic();
     Duration frameRate = const Duration(milliseconds: 300);
     _timer = Timer.periodic(frameRate, (timer) {
       setState(() {
         _score += _boardStateNotifier.tick();
         if (_boardStateNotifier.gameState == GameState.gameOver) {
-          timer.cancel();
+          _stopTimer(timer);
           _state = _GameState.gameOver;
         }
       });
     });
+  }
+
+  void _stopTimer(Timer timer) {
+    timer.cancel();
+    _stopBGMusic();
   }
 
   void _moveLeft() {
@@ -304,7 +309,13 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     return false;
   }
 
-  void _playBGMusic() {
-    FlameAudio.bgm.play("background.mp3", volume: 0.2);
+  void _startBGMusic() {
+    if (_bgMusic) {
+      FlameAudio.bgm.play("background.mp3", volume: 0.2);
+    }
+  }
+
+  void _stopBGMusic() {
+    FlameAudio.bgm.stop();
   }
 }
