@@ -23,7 +23,7 @@ It will run all tests and the application in a simulator of your choice.
 
 ## Sounds
 
-I got the music and sounds out of pixabay.
+I got the music and sounds out of [Pixabay](https://pixabay.com).
 
 | Sounds                                                                           | Description                                                            |
 | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |

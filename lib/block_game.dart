@@ -34,7 +34,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
         case AppLifecycleState.paused:
           if (_state == _GameState.play) {
             _state = _GameState.pause;
-            _stopTimer(_timer!);
+            _stopTimer();
           }
           break;
         case AppLifecycleState.resumed:
@@ -48,10 +48,12 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    FlameAudio.bgm.initialize();
-
     ServicesBinding.instance.keyboard.addHandler(_keyboardHandler);
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        _loadMusic();
+      },
+    );
   }
 
   @override
@@ -95,7 +97,9 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
                             _stopBGMusic();
                           } else {
                             _bgMusic = true;
-                            _startBGMusic();
+                            if (_GameState == GameState.running) {
+                              _startBGMusic();
+                            }
                           }
                         })
                       },
@@ -135,7 +139,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
                         color: Colors.white,
                       )),
                   IconButton(
-                      onPressed: () => _moveRight,
+                      onPressed: () => _moveRight(),
                       icon: const Icon(
                         Icons.arrow_right,
                         color: Colors.white,
@@ -188,6 +192,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
           const Spacer(),
           TextButton(
             onPressed: () {
+              _playSound("button.mp3");
               _startNewGame();
             },
             child: const Text('New Game'),
@@ -230,6 +235,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
           const Spacer(),
           TextButton(
             onPressed: () {
+              _playSound("button.mp3");
               setState(() {
                 _state = _GameState.play;
                 _startTimer();
@@ -245,6 +251,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
 
   void _startNewGame() {
     setState(() {
+      _playSound("game-start.mp3");
       _boardStateNotifier = GameNotifier(createGamePieceProvider());
       _state = _GameState.play;
       _score = 0;
@@ -257,36 +264,49 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     Duration frameRate = const Duration(milliseconds: 300);
     _timer = Timer.periodic(frameRate, (timer) {
       setState(() {
-        _score += _boardStateNotifier.tick();
-        if (_boardStateNotifier.gameState == GameState.gameOver) {
-          _stopTimer(timer);
-          _state = _GameState.gameOver;
-        }
+        _tickGame();
       });
     });
   }
 
-  void _stopTimer(Timer timer) {
-    timer.cancel();
+  void _stopTimer() {
+    _timer!.cancel();
     _stopBGMusic();
   }
 
   void _moveLeft() {
+    _playSound("move.mp3");
     _boardStateNotifier.moveLeft();
   }
 
   void _moveRight() {
+    _playSound("move.mp3");
     _boardStateNotifier.moveRight();
   }
 
   void _rotate() {
+    _playSound("rotate.mp3");
     _boardStateNotifier.rotate();
   }
 
   void _moveDown() {
+    _playSound("down.mp3");
+    _tickGame();
+  }
+
+  void _tickGame() {
+    var tickScore = _boardStateNotifier.tick();
     setState(() {
-      _score += _boardStateNotifier.tick();
+      _score += tickScore;
     });
+    if (tickScore > 0) {
+      _playSound("score.mp3");
+    }
+    if (_boardStateNotifier.gameState == GameState.gameOver) {
+      _stopTimer();
+      _state = _GameState.gameOver;
+      _playSound("game-over.mp3");
+    }
   }
 
   bool _keyboardHandler(KeyEvent event) {
@@ -317,5 +337,32 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
 
   void _stopBGMusic() {
     FlameAudio.bgm.stop();
+  }
+
+  void _loadMusic() async {
+    FlameAudio.bgm.initialize();
+
+    await FlameAudio.audioCache.load("background.mp3");
+    await FlameAudio.audioCache.load("button.mp3");
+    await FlameAudio.audioCache.load("down.mp3");
+    await FlameAudio.audioCache.load("game-over.mp3");
+    await FlameAudio.audioCache.load("game-start.mp3");
+    await FlameAudio.audioCache.load("move.mp3");
+    await FlameAudio.audioCache.load("rotate.mp3");
+    await FlameAudio.audioCache.load("score.mp3");
+  }
+
+  void _playSound(String file) {
+    FlameAudio.play(file).then(
+      (value) {
+        print("Playing ${file}...");
+        value.onPlayerComplete.listen(
+          (event) {
+            print("Disposing ${file}...");
+            value.dispose();
+          },
+        );
+      },
+    );
   }
 }
