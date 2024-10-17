@@ -12,9 +12,7 @@ flutter test && flutter run
 
 It will run all tests and the application in a simulator of your choice.
 
-I have also published the HTML version of the [game to itch.io](https://nunosousa.itch.io/block-puzzle). This allow you to play it in the browser.
-
-<iframe frameborder="0" src="https://itch.io/embed-upload/11744413?color=333333" allowfullscreen="" width="640" height="500"><a href="https://nunosousa.itch.io/block-puzzle">Play Block Puzzle on itch.io</a></iframe>
+I have also published the HTML version of the [game to itch.io](https://nunosousa.itch.io/block-puzzle). You [can play it](https://nunosousa.itch.io/block-puzzle) in the browser!
 
 ## All Iterations
 
