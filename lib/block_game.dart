@@ -355,10 +355,8 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   void _playSound(String file) {
     FlameAudio.play(file).then(
       (value) {
-        print("Playing ${file}...");
         value.onPlayerComplete.listen(
           (event) {
-            print("Disposing ${file}...");
             value.dispose();
           },
         );
