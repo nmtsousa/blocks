@@ -21,6 +21,7 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
   _GameState _state = _GameState.home;
   GameNotifier _boardStateNotifier = GameNotifier(createGamePieceProvider());
   int _score = 0;
+  int _timeInterval = 600;
   Timer? _timer;
   bool _bgMusic = true;
 
@@ -255,13 +256,14 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
       _boardStateNotifier = GameNotifier(createGamePieceProvider());
       _state = _GameState.play;
       _score = 0;
+      _timeInterval = 500;
       _startTimer();
     });
   }
 
   void _startTimer() {
     _startBGMusic();
-    Duration frameRate = const Duration(milliseconds: 300);
+    Duration frameRate = Duration(milliseconds: _timeInterval);
     _timer = Timer.periodic(frameRate, (timer) {
       setState(() {
         _tickGame();
@@ -298,6 +300,11 @@ class _BlockGameState extends State<BlockGame> with WidgetsBindingObserver {
     var tickScore = _boardStateNotifier.tick();
     setState(() {
       _score += tickScore;
+      if (_timeInterval > 300) {
+        _timeInterval -= 5 * tickScore;
+        _stopTimer();
+        _startTimer();
+      }
     });
     if (tickScore > 0) {
       _playSound("score.mp3");
