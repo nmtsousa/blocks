@@ -139,10 +139,6 @@ class Game {
   }
 
   bool _pieceFitsInBoard(Piece piece, int pieceRow, int pieceCol) {
-    if (pieceCol < 0) {
-      return false;
-    }
-
     for (int row = 0; row < piece.getRowCount(); row++) {
       if (pieceRow + row >= _rowCount) {
         return false;
@@ -154,7 +150,8 @@ class Game {
         }
 
         if (piece.getPixel(row, col) != ' ' &&
-            _boardState[pieceRow + row][pieceCol + col] != ' ') {
+            (pieceCol + col < 0 ||
+                _boardState[pieceRow + row][pieceCol + col] != ' ')) {
           return false;
         }
       }

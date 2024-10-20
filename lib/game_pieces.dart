@@ -90,10 +90,10 @@ Iterable<Piece> createGamePieceProvider() sync* {
             'FFFF',
           ]),
           PieceSprite([
-            'F',
-            'F',
-            'F',
-            'F',
+            ' F',
+            ' F',
+            ' F',
+            ' F',
           ]),
         ]);
         break;
